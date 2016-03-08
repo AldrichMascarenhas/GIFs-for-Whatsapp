@@ -1,5 +1,5 @@
 
-package com.nerdcutlet.gift.models.gifs;
+package com.nerdcutlet.gift.models.giphy;
 
 import java.util.ArrayList;
 import java.util.List;

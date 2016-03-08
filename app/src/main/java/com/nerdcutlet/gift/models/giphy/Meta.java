@@ -1,5 +1,5 @@
 
-package com.nerdcutlet.gift.models.gifs.random;
+package com.nerdcutlet.gift.models.giphy;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

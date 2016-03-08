@@ -1,10 +1,10 @@
 
-package com.nerdcutlet.gift.models.gifs;
+package com.nerdcutlet.gift.models.giphy;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FixedHeightStill {
+public class FixedHeightSmallStill {
 
     @SerializedName("url")
     @Expose
