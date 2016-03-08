@@ -1,7 +1,7 @@
 package com.nerdcutlet.gift.network;
 
-import com.nerdcutlet.gift.models.gifs.GIFModelMain;
-import com.nerdcutlet.gift.models.gifs.random.RandomGIFModel;
+import com.nerdcutlet.gift.models.giphy.GIFModelMain;
+import com.nerdcutlet.gift.models.giphy.random.RandomGIFModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -29,5 +29,13 @@ public interface GiphyApiInterface {
     @GET("gifs/random")
     Call<RandomGIFModel> getRandomGif(@Query("tag") String tag, @Query("rating") String rating, @Query("api_key") String API_KEY);
 
+    //
+    @GET("stickers/search")
+    Call<GIFModelMain> searchStickers(@Query("q") String searchParameter, @Query("rating") String rating, @Query("limit") int limit, @Query("api_key") String API_KEY);
 
+    @GET("stickers/trending")
+    Call<GIFModelMain> getTrendingStickers(@Query("s") String searchParameter, @Query("rating") String rating, @Query("limit") int limit, @Query("api_key") String API_KEY);
+
+    @GET("stickers/random")
+    Call<RandomGIFModel> getRandomSticker(@Query("tag") String tag, @Query("rating") String rating, @Query("api_key") String API_KEY);
 }
