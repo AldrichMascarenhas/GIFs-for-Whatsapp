@@ -1,5 +1,7 @@
 package com.nerdcutlet.gift.activities;
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,28 +13,45 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nerdcutlet.gift.BuildConfig;
 import com.nerdcutlet.gift.R;
+import com.nerdcutlet.gift.fragments.FilterFragment;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.models.giphy.GIFModelMain;
 import com.nerdcutlet.gift.network.GiphyApi;
 import com.nerdcutlet.gift.network.GiphyApiInterface;
+import com.nerdcutlet.gift.other.AsyncHttpTask;
 import com.nerdcutlet.gift.other.adapters.MyRecyclerAdapter;
+import com.nerdcutlet.gift.utils.AsyncTaskResponse;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Url;
 
-public class GifDisplayActivity extends AppCompatActivity {
+public class GifDisplayActivity extends AppCompatActivity implements FilterFragment.OnFilterSelectedListener, AsyncTaskResponse {
 
     public static final String LOG_TAG = "GifDisplayActivity";
     private RecyclerView mRecyclerView;
     private MyRecyclerAdapter adapter;
+
+    AsyncHttpTask task = new AsyncHttpTask();
+
+    String searchData;
+    boolean isGif;
+    String rating = "g";
+    int limit = 50;
 
 
     @Override
@@ -42,9 +61,18 @@ public class GifDisplayActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        Intent intent = getIntent();
+        if (null != intent) { //Null Checking
+            searchData = intent.getStringExtra("search_param");
+            isGif = intent.getBooleanExtra("ifGif", true);
+            Log.e(LOG_TAG, searchData + " " + isGif);
+        }
+
+
         // Initialize recycler view
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-       // mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        // mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
         adapter = new MyRecyclerAdapter(this);
@@ -61,67 +89,48 @@ public class GifDisplayActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        new AsyncHttpTask().execute();
+
+
+        task.setData(searchData, isGif, rating, limit);
+        task.asyncTaskResponse = this;
+        task.execute();
+
+
     }
 
-    public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+    public void onFilterSelected(RadioButton filter, RadioButton limit) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
+        Toast.makeText(getApplicationContext(), "SELECTED " + filter.getText() + " " + limit.getText(), Toast.LENGTH_LONG).show();
 
-            GiphyApiInterface interf = GiphyApi.createService(GiphyApiInterface.class);
-            Call<GIFModelMain> call = interf.searchGifs("cats", "g", 10, BuildConfig.GIPHY_API_TOKEN);
-
-
-            call.enqueue(new Callback<GIFModelMain>() {
-                @Override
-                public void onResponse(Call<GIFModelMain> call, Response<GIFModelMain> response) {
-                    Log.d(LOG_TAG, "Status Code = " + response.code());
-
-                    if (response.isSuccess()) {
-                        // request successful (status code 200, 201)
-                        GIFModelMain result = response.body();
-                        List<Datum> p = result.getData();
-
-                        /*
-                        Log.d(LOG_TAG, "response = " + new Gson().toJson(result));
-                        for (int x = 0; x < p.size(); x++) {
-                            Log.d(LOG_TAG, "id : " + p.get(x).getId());
-                        }
-                        */
-
-                        adapter.setmGIFDataList(p);
-
-
-                    } else {
-                        //request not successful (like 400,401,403 etc)
-                        //Handle errors
-                        String X = response.body().toString();
-                        Log.e(LOG_TAG, "fail" + X);
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<GIFModelMain> call, Throwable t) {
-                    Log.e(LOG_TAG, "fail");
-
-                }
-            });
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
+    }
+    public void processFinish(List<Datum> p){
+        adapter.setmGIFDataList(p);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_filter, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_filter) {
+            FragmentManager fm = getFragmentManager();
+            FilterFragment dialogFragment = new FilterFragment();
+            dialogFragment.show(fm, "Fragment");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
