@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/custom_dialog_padding">
+
+    <TextView
+        android:id="@+id/filter_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/radio_group_filter"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <RadioGroup
+        android:weightSum="4"
+        android:id="@+id/rating_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rating_radio_group_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/filter_g" />
+
+        <RadioButton
+            android:id="@+id/rating_radio_group_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/filter_pg" />
+
+        <RadioButton
+            android:id="@+id/rating_radio_group_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/filter_pg_13" />
+
+        <RadioButton
+            android:id="@+id/rating_radio_group_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/filter_r" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/limit_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/radio_group_limit"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <RadioGroup
+        android:id="@+id/limit_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/limit_radio_group_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/limit_1" />
+
+        <RadioButton
+            android:id="@+id/limit_radio_group_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/limit_2" />
+
+        <RadioButton
+            android:id="@+id/limit_radio_group_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/limit_3" />
+
+        <RadioButton
+            android:id="@+id/limit_radio_group_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/limit_4" />
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:text="@string/filter_apply"
+            android:id="@+id/filter_set_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+</LinearLayout>

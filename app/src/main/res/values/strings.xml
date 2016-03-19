@@ -2,4 +2,28 @@
     <string name="app_name">Gift</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_gif_display">GifDisplayActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+    <string name="filter_apply">Apply</string>
+
+    <!--Filter Radio Group-->
+    <string name="radio_group_filter">Rating</string>
+    <string name="filter_g">G</string>
+    <string name="filter_pg">PG</string>
+    <string name="filter_pg_13">PG13</string>
+    <string name="filter_r">R</string>
+
+
+    <!--Limit Radio Group-->
+    <string name="radio_group_limit">Limit</string>
+    <string name="limit_1">10</string>
+    <string name="limit_2">30</string>
+    <string name="limit_3">50</string>
+    <string name="limit_4">75</string>
+
+
 </resources>

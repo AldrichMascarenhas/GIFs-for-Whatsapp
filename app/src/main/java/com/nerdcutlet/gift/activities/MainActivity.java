@@ -1,5 +1,6 @@
 package com.nerdcutlet.gift.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,16 +9,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -42,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "MainActivity";
     boolean ifGif = true;
+
+    DisplayMetrics display;
+    int height =0;
+    int width =0;
+
 
 
     @Bind(R.id.gif_selected_button)
@@ -76,12 +86,35 @@ public class MainActivity extends AppCompatActivity {
     Button searchVoiceButton;
 
 
+    @Bind(R.id.background_view)
+    LinearLayout background_view;
+
+
+    @OnClick(R.id.test1)
+    void TrendingGifs(){
+        Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
+       // i.putExtra("ifGif", ifGif);
+       // i.putExtra("search_param", searchParams);
+        startActivity(i);
+    }
+
+    @OnClick(R.id.test2)
+    void RandomGifs(){
+        Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
+       // i.putExtra("ifGif", ifGif);
+       // i.putExtra("search_param", searchParams);
+        startActivity(i);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
+        setViewHeight(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,6 +151,15 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("ifGif", ifGif);
         i.putExtra("search_param", searchParams);
         startActivity(i);
+
+    }
+
+    public void setViewHeight(Context context){
+        display = context.getResources().getDisplayMetrics();
+        width = display.widthPixels;
+        height = display.heightPixels;
+        height = height * 3 / 4;
+        background_view.setLayoutParams(new FrameLayout.LayoutParams(width, height));
 
     }
 

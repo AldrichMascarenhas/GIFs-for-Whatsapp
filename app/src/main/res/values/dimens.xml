@@ -5,6 +5,10 @@
 
 
 
-
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="custom_dialog_padding">20dp</dimen>
+
+
+
 </resources>

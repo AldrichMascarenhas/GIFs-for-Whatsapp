@@ -5,19 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:showIn="@layout/content_main">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <Button
+            android:id="@+id/gif_selected_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <Button
+            android:id="@+id/sticker_selected_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -30,17 +34,22 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/search_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <AutoCompleteTextView
+        <EditText
+            android:id="@+id/search_edittext_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5" />
+            android:layout_weight="5"
+            android:inputType="text"
+            android:imeOptions="actionSend"/>
 
 
         <Button
+            android:id="@+id/search_voice_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
