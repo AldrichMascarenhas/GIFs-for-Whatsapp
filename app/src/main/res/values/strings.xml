@@ -25,5 +25,11 @@
     <string name="limit_3">50</string>
     <string name="limit_4">75</string>
 
+    <!--Cards-->
+    <string name="random_gifs_text">Random</string>
+
+
+
+
 
 </resources>
