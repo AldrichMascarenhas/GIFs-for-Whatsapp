@@ -50,6 +50,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
 
     String searchData;
     boolean isGif;
+    boolean trending;
     String rating = "g";
     int limit = 50;
 
@@ -65,8 +66,9 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
         Intent intent = getIntent();
         if (null != intent) { //Null Checking
             searchData = intent.getStringExtra("search_param");
-            isGif = intent.getBooleanExtra("ifGif", true);
-            Log.e(LOG_TAG, searchData + " " + isGif);
+            isGif = intent.getBooleanExtra("ifGif", true); //By default set it to TRUE.
+            trending = intent.getBooleanExtra("trending", false); //By default set to FALSE
+            Log.e(LOG_TAG, searchData + " " + isGif + " " + trending);
         }
 
 
@@ -91,7 +93,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        task.setData(searchData, isGif, rating, limit);
+        task.setData(searchData, isGif, trending, rating, limit);
         task.asyncTaskResponse = this;
         task.execute();
 

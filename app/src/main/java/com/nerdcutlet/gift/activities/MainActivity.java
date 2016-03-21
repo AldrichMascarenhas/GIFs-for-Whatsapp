@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "MainActivity";
     boolean ifGif = true;
-
+    boolean trending = false;
     DisplayMetrics display;
     int height =0;
     int width =0;
@@ -80,30 +80,19 @@ public class MainActivity extends AppCompatActivity {
     EditText searchEditText;
 
 
-    @Bind(R.id.search_button)
-    Button searchButton;
-    @Bind(R.id.search_voice_btn)
-    Button searchVoiceButton;
-
-
     @Bind(R.id.background_view)
     LinearLayout background_view;
 
+    @Bind(R.id.fav_button)
+    Button fav_button;
 
-    @OnClick(R.id.test1)
-    void TrendingGifs(){
-        Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
-       // i.putExtra("ifGif", ifGif);
-       // i.putExtra("search_param", searchParams);
-        startActivity(i);
-    }
+    @Bind(R.id.trending_button)
+    Button trending_button;
 
-    @OnClick(R.id.test2)
-    void RandomGifs(){
-        Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
-       // i.putExtra("ifGif", ifGif);
-       // i.putExtra("search_param", searchParams);
-        startActivity(i);
+    @OnClick(R.id.trending_button)
+    void trendingButtonClick(){
+        trending = true;
+        sendMessage("fake_data", false,trending);
     }
 
 
@@ -124,32 +113,29 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    sendMessage(searchEditText.getText().toString(), ifGif);
+                    sendMessage(searchEditText.getText().toString(), ifGif, trending);
                     handled = true;
                 }
                 return handled;
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
-                startActivity(i);
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-
-            }
-        });
     }
 
-    public void sendMessage(String searchParams, boolean ifGif) {
+    public void sendMessage(String searchParams, boolean ifGif, boolean trending) {
+        /*
+        By default the search will take place for a GIF which is default set to TRUE.
+        If ifGif then do a Call for Gif Search,
+            if !ifGif then do a Call for Sticker Search.
+
+        trending by default is FALSE.
+            if the Trending Button is pressed then it is set to True and the function is called.
+         */
         Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
         i.putExtra("ifGif", ifGif);
         i.putExtra("search_param", searchParams);
+        i.putExtra("trending", trending);
         startActivity(i);
 
     }
@@ -158,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         display = context.getResources().getDisplayMetrics();
         width = display.widthPixels;
         height = display.heightPixels;
-        height = height * 3 / 4;
+        height = height * 7 / 10;
         background_view.setLayoutParams(new FrameLayout.LayoutParams(width, height));
 
     }
