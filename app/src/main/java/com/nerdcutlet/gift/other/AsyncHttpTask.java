@@ -27,13 +27,12 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
     private final static String LOG_TAG = "AsyncHttpTask";
     String searchParameter;
-    boolean isGif;
-    boolean trending;
+    int typeOfData;
     String rating;
     int limit;
 
 
-    public void setData(String search, boolean isGif, boolean trending, String rating, int limit) {
+    public void setData(String search, int typeOfData, String rating, int limit) {
         try {
             this.searchParameter = URLEncoder.encode(search, "UTF-8");
 
@@ -41,8 +40,7 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
             Log.e(LOG_TAG, e.toString());
 
         }
-        this.isGif = isGif;
-        this.trending = trending;
+        this.typeOfData = typeOfData;
         this.rating = rating;
         this.limit = limit;
 
@@ -60,18 +58,15 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
         Call<GIFModelMain> stickerCall;
         Call<GIFModelMain> trendingCall;
 
-        if (isGif) {
-            //Is a Gif
+        if (typeOfData == 0) {
             gifCall = interf.searchGifs(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(gifCall);
 
-        } else if(!isGif && !trending){
-            //Is a Sticker as !Gif & !trending
+        } else if (typeOfData == 1) {
             stickerCall = interf.searchStickers(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(stickerCall);
 
-        }else if(!isGif && trending) {
-            //Trending
+        } else if (typeOfData == 2) {
             trendingCall = interf.getTrendingGifs(rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(trendingCall);
 

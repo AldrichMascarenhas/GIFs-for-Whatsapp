@@ -46,8 +46,9 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "MainActivity";
-    boolean ifGif = true;
-    boolean trending = false;
+
+    int typeOfData = 0; //0 is GIF, 1 is Sticker , 2 is Trending GIFs.
+
     DisplayMetrics display;
     int height =0;
     int width =0;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.gif_selected_button)
     public void gifSelected() {
-        ifGif = true;
+        typeOfData = 0;
         gifSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.selected));
         stickerSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.notselected));
     }
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.sticker_selected_button)
     public void stickerSelected() {
-        ifGif = false;
+        typeOfData = 1;
         gifSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.notselected));
         stickerSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.selected));
     }
@@ -91,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.trending_button)
     void trendingButtonClick(){
-        trending = true;
-        sendMessage("fake_data", false,trending);
+        typeOfData = 2;
+        sendMessage("fake_data", typeOfData);
     }
 
 
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    sendMessage(searchEditText.getText().toString(), ifGif, trending);
+                    sendMessage(searchEditText.getText().toString(), typeOfData);
                     handled = true;
                 }
                 return handled;
@@ -123,19 +124,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void sendMessage(String searchParams, boolean ifGif, boolean trending) {
-        /*
-        By default the search will take place for a GIF which is default set to TRUE.
-        If ifGif then do a Call for Gif Search,
-            if !ifGif then do a Call for Sticker Search.
+    public void sendMessage(String searchParams, int typeOfData) {
 
-        trending by default is FALSE.
-            if the Trending Button is pressed then it is set to True and the function is called.
-         */
         Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
-        i.putExtra("ifGif", ifGif);
         i.putExtra("search_param", searchParams);
-        i.putExtra("trending", trending);
+        i.putExtra("typeOfData", typeOfData);
         startActivity(i);
 
     }
