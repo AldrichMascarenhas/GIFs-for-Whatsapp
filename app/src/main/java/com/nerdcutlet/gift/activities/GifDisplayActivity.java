@@ -30,6 +30,7 @@ import com.nerdcutlet.gift.network.GiphyApiInterface;
 import com.nerdcutlet.gift.other.AsyncHttpTask;
 import com.nerdcutlet.gift.other.adapters.MyRecyclerAdapter;
 import com.nerdcutlet.gift.utils.AsyncTaskResponse;
+import com.nerdcutlet.gift.views.OnItemClickListener;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -53,6 +54,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
     String rating = "g";
     int limit = 50;
 
+    List<Datum> datums;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,23 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
         // mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
-        adapter = new MyRecyclerAdapter(this);
+        adapter = new MyRecyclerAdapter(this, new OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Datum selectedDatum = datums.get(position);
+
+                Intent gifIntent = new Intent(getApplicationContext(), GifActivity.class);
+
+                gifIntent.putExtra("getRating",selectedDatum.getRating());
+                gifIntent.putExtra("getMp4", selectedDatum.getImages().getFixedHeight().getMp4());
+                gifIntent.putExtra("getMp4Size", selectedDatum.getImages().getFixedHeight().getMp4Size());
+                gifIntent.putExtra("getWebp",selectedDatum.getImages().getFixedHeight().getWebp() );
+                gifIntent.putExtra("getWebpSize",selectedDatum.getImages().getFixedHeight().getWebpSize() );
+                gifIntent.putExtra("getStillUrl",selectedDatum.getImages().getFixedHeightStill().getUrl() );
+
+                startActivity(gifIntent);
+            }
+        });
 
         mRecyclerView.setAdapter(adapter);
 
@@ -104,6 +122,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
 
     }
     public void processFinish(List<Datum> p){
+        datums = p;
         adapter.setmGIFDataList(p);
     }
 
