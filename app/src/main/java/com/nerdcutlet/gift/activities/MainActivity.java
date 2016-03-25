@@ -22,6 +22,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,8 +31,10 @@ import com.nerdcutlet.gift.BuildConfig;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.models.giphy.GIFModelMain;
+import com.nerdcutlet.gift.models.giphy.random.RandomGIFModel;
 import com.nerdcutlet.gift.network.GiphyApi;
 import com.nerdcutlet.gift.network.GiphyApiInterface;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     int height =0;
     int width =0;
 
+    GiphyApiInterface interf = GiphyApi.createService(GiphyApiInterface.class);
+    Call<RandomGIFModel> randomGif = interf.getRandomGif("", "g", BuildConfig.GIPHY_API_TOKEN);
 
 
     @Bind(R.id.gif_selected_button)
@@ -96,12 +101,21 @@ public class MainActivity extends AppCompatActivity {
         sendMessage("fake_data", typeOfData);
     }
 
+    @OnClick(R.id.random_gif_button)
+    void newRandomGif(){
+        FetchData(randomGif);
+    }
+
+    @Bind(R.id.random_card_image)
+    ImageView randomCardImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        FetchData(randomGif);
 
 
         setViewHeight(this);
@@ -162,5 +176,39 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void FetchData(Call<RandomGIFModel> call) {
+        //Since a Call instance can only be used once. Use clone to use it over again.
+
+        call.clone().enqueue(new Callback<RandomGIFModel>() {
+            @Override
+            public void onResponse(Call<RandomGIFModel> call, Response<RandomGIFModel> response) {
+                Log.d(LOG_TAG, "Status Code = " + response.code());
+
+                if (response.isSuccess()) {
+                    // request successful (status code 200, 201)
+                    RandomGIFModel result
+                            = response.body();
+                    Picasso.with(getApplicationContext()).load(result.getData().getFixedHeightDownsampledUrl()).into(randomCardImage);
+
+
+                    Log.d(LOG_TAG, "response = " + new Gson().toJson(result));
+
+
+                } else {
+                    //request not successful (like 400,401,403 etc)
+                    //Handle errors
+                    String X = response.body().toString();
+                    Log.e(LOG_TAG, "fail" + X);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RandomGIFModel> call, Throwable t) {
+                Log.e(LOG_TAG, "fail");
+
+            }
+        });
     }
 }

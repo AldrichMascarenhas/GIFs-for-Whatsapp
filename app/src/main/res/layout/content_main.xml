@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,12 +32,12 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_action_action_search"
             android:id="@+id/search_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/ic_action_action_search" />
 
         <EditText
             android:id="@+id/search_edittext_field"
@@ -48,12 +49,12 @@
 
 
         <ImageView
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_action_voice"
             android:id="@+id/search_voice_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/ic_action_voice" />
 
     </LinearLayout>
 </LinearLayout>
