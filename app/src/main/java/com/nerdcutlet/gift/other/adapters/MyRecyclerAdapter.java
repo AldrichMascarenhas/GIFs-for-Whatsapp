@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.koushikdutta.ion.Ion;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.views.OnItemClickListener;
@@ -19,6 +20,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Created by Aldrich on 08-03-2016.
@@ -74,10 +77,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         Datum data = mGIFDataList.get(position);
 
-        Picasso.with(mContext)
-                .load(data.getImages().getFixedHeightSmallStill().getUrl())
-                .placeholder(R.color.colorAccent)
-                .into(holder.mGifImageView);
+
+
+        Ion.with(holder.gifImageView)
+                .load(data.getImages().getFixedHeightSmall().getUrl());
+
 
         holder.mGIFTypeTextView.setText(data.getId());
         holder.mGifNameTextView.setText(data.getRating());
@@ -97,15 +101,15 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 }
 
 class CustomViewHolder extends RecyclerView.ViewHolder{
-    protected ImageView mGifImageView;
     protected TextView mGifNameTextView;
     protected TextView mGIFTypeTextView;
+    protected GifImageView gifImageView;
 
     public CustomViewHolder(View view) {
         super(view);
 
 
-        this.mGifImageView = (ImageView) view.findViewById(R.id.gif_image_view);
+        this.gifImageView = (GifImageView) view.findViewById(R.id.gifImageView);
         this.mGifNameTextView = (TextView) view.findViewById(R.id.gif_name);
         this.mGIFTypeTextView = (TextView) view.findViewById(R.id.gif_type);
 

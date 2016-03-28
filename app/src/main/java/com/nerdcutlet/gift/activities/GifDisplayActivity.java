@@ -56,6 +56,8 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
 
     List<Datum> datums;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +71,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
             searchData = intent.getStringExtra("search_param");
             typeOfData = intent.getIntExtra("typeOfData", 0);
         }
+
 
 
         // Initialize recycler view

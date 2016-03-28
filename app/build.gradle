@@ -46,5 +46,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.0'
 
     compile 'com.github.satyan:sugar:1.5'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+    compile 'com.koushikdutta.ion:ion:2.+'
 
 }
