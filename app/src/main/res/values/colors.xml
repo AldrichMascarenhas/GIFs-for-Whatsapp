@@ -11,8 +11,10 @@
 
 
     <color name="selected">#e67e22</color>
+
     <color name="notselected">#3498db</color>
 
 
+    <color name="back_color">#2c3e50</color>
 
 </resources>
