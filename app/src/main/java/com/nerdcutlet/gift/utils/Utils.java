@@ -25,7 +25,7 @@ public class Utils {
         return dp;
     }
 
-    public static boolean isExternalStorageAvailable() {
+    public  boolean isExternalStorageAvailable() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
             return true;
@@ -33,7 +33,7 @@ public class Utils {
         return false;
     }
 
-    public static boolean isExternalStorageReadOnly() {
+    public  boolean isExternalStorageReadOnly() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
             return true;
