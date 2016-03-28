@@ -2,6 +2,8 @@ package com.nerdcutlet.gift.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -14,17 +16,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.nerdcutlet.gift.R;
+import com.nerdcutlet.gift.models.FavouriteGif;
 import com.nerdcutlet.gift.other.adapters.VideoAsyncTask;
 import com.nerdcutlet.gift.utils.Utils;
+import com.nerdcutlet.gift.utils.VideoDownloadResponse;
 import com.squareup.picasso.Picasso;
+import static com.orm.SugarRecord.save;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class GifActivity extends Activity {
+public class GifActivity extends Activity implements VideoDownloadResponse {
 
     public final static String LOG_TAG = "GifActivity";
     Utils utils = new Utils();
@@ -32,8 +41,39 @@ public class GifActivity extends Activity {
     int mwidth, mheight;
 
     String data;
+    String gifID;
 
+    String localurl;
 
+    ImageView gifImage;
+    VideoView videoView;
+    @Override
+    public void localVideoUrl(String videoUrl) {
+        localurl = videoUrl;
+        Log.d(LOG_TAG, localurl);
+        gifImage.setVisibility(View.GONE);
+        videoView.setVisibility(View.VISIBLE);
+
+        //Creating MediaController
+        MediaController mediaController= new MediaController(this);
+        mediaController.setAnchorView(videoView);
+
+        //specify the location of media file
+        Uri uri= Uri.parse(localurl);
+
+        //Setting MediaController and URI, then starting the videoView
+        videoView.setMediaController(mediaController);
+
+        videoView.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+        videoView.setVideoURI(uri);
+        videoView.requestFocus();
+        videoView.start();
+    }
 
     VideoAsyncTask task = new VideoAsyncTask();
 
@@ -42,7 +82,8 @@ public class GifActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gif);
 
-        ImageView gifImage = (ImageView) findViewById(R.id.gif_image);
+         gifImage = (ImageView) findViewById(R.id.gif_image);
+         videoView =(VideoView)findViewById(R.id.videoView1);
 
         Intent i = getIntent();
         i.getStringExtra("getRating");
@@ -55,6 +96,8 @@ public class GifActivity extends Activity {
         String url = i.getStringExtra("getStillUrl");
         i.getStringExtra("getWidth");
         i.getStringExtra("getHeight");
+        gifID = i.getStringExtra("getId");
+
 
         Log.d(LOG_TAG, i.getStringExtra("getRating") + " " +
                 i.getStringExtra("getImportDatetime") + " " +
@@ -100,17 +143,37 @@ public class GifActivity extends Activity {
         gifscrollview.requestLayout();
 
 
+
         Button testb = (Button)findViewById(R.id.test_btn);
         testb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Toast.makeText(getApplicationContext(), "HI",Toast.LENGTH_LONG).show();
-                task.setData(getApplicationContext(), data);
-                task.execute();
+                doStuff();
+
             }
         });
 
+
+        Button fav_btn = (Button)findViewById(R.id.fav_btn);
+        fav_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "GIF ID before save : " + gifID);
+
+
+                FavouriteGif favouriteGif = new FavouriteGif(gifID.toString());
+                favouriteGif.save();
+
+            }
+        });
+    }
+
+    void doStuff(){
+        task.setData(getApplicationContext(), data);
+        task.videoDownloadResponse = this;
+        task.execute();
     }
 }
 
