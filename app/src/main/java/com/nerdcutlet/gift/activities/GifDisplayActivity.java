@@ -83,14 +83,19 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
 
                 Intent gifIntent = new Intent(getApplicationContext(), GifActivity.class);
 
+                gifIntent.putExtra("getId", selectedDatum.getId());
                 gifIntent.putExtra("getRating",selectedDatum.getRating());
                 gifIntent.putExtra("getImportDatetime",selectedDatum.getImportDatetime());
                 gifIntent.putExtra("getTrendingDatetime",selectedDatum.getTrendingDatetime());
+
                 gifIntent.putExtra("getMp4", selectedDatum.getImages().getFixedHeight().getMp4());
                 gifIntent.putExtra("getMp4Size", selectedDatum.getImages().getFixedHeight().getMp4Size());
                 gifIntent.putExtra("getWebp",selectedDatum.getImages().getFixedHeight().getWebp() );
                 gifIntent.putExtra("getWebpSize",selectedDatum.getImages().getFixedHeight().getWebpSize() );
-                gifIntent.putExtra("getStillUrl",selectedDatum.getImages().getFixedHeightStill().getUrl() );
+
+                gifIntent.putExtra("getStillUrl",selectedDatum.getImages().getFixedHeightStill().getUrl()
+
+                );
                 gifIntent.putExtra("getWidth", selectedDatum.getImages().getFixedHeight().getWidth());
                 gifIntent.putExtra("getHeight", selectedDatum.getImages().getFixedHeight().getHeight());
 
