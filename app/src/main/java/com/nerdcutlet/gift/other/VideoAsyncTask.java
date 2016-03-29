@@ -1,10 +1,12 @@
-package com.nerdcutlet.gift.other.adapters;
+package com.nerdcutlet.gift.other;
 
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nerdcutlet.gift.R;
@@ -42,15 +44,16 @@ public class VideoAsyncTask extends AsyncTask<Void, Void, Void> {
 
 
     File myExternalFile;
-
+    ProgressBar progressBar;
 
     String filename = "myfile.mp4";
     String string = "Hello world!";
 
 
-    public void setData(Context context, String url) {
+    public void setData(Context context, String url, ProgressBar progressBar) {
         this.VideoUrl = url;
         this.context = context;
+        this.progressBar=progressBar;
     }
 
     @Override
@@ -108,6 +111,7 @@ public class VideoAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        progressBar.setVisibility(View.INVISIBLE);
         videoDownloadResponse.localVideoUrl(myExternalFile.getAbsolutePath());
 
     }
@@ -115,6 +119,7 @@ public class VideoAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,26 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.airbnb.deeplinkdispatch.DeepLink;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.models.FavouriteGif;
-import com.nerdcutlet.gift.other.adapters.VideoAsyncTask;
+import com.nerdcutlet.gift.other.VideoAsyncTask;
 import com.nerdcutlet.gift.utils.Utils;
 import com.nerdcutlet.gift.utils.VideoDownloadResponse;
 import com.squareup.picasso.Picasso;
-
-import static com.orm.SugarRecord.save;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.OnClick;
 
 @DeepLink({"https://giphy.com/gifs/{giphyType1}", "https://giphy.com/gifs/{giphyType2}/html5",
         "https://gfycat.com/{gfycatType1}", "https://zippy.gfycat.com/{gfycatType2}", "https://giant.gfycat.com/{gfycatType3}"})
@@ -52,7 +41,8 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
 
     ImageView gifImage;
     VideoView videoView;
-
+    ProgressBar progressBar;
+    
 
     VideoAsyncTask task = new VideoAsyncTask();
 
@@ -65,6 +55,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         gifImage = (ImageView) findViewById(R.id.gif_image);
         videoView = (VideoView) findViewById(R.id.videoView1);
 
+         progressBar = (ProgressBar)findViewById(R.id.gif_progress);
         View gifblankview = (View) findViewById(R.id.gif_blank_view);
         NestedScrollView gifscrollview = (NestedScrollView) findViewById(R.id.gif_scrollview);
 
@@ -182,8 +173,23 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
 
         if (giphyType1 != null) {
             builtURL = "https://media2.giphy.com/media/" + giphyType1 + "/200.mp4";
+
+
+            Picasso.with(getApplicationContext())
+                    .load("https://media2.giphy.com/media/" + giphyType1 + "/200.gif")
+                    .placeholder(R.color.colorAccent)
+                    .into(gifImage);
+
         } else if (giphyType2 != null) {
             builtURL = "https://media2.giphy.com/media/" + giphyType2 + "/200.mp4";
+
+
+            Picasso.with(getApplicationContext())
+                    .load("https://media2.giphy.com/media/" + giphyType2 + "/200.gif")
+                    .placeholder(R.color.colorAccent)
+                    .into(gifImage);
+
+
         } else if (gfycatType1 != null) {
             builtURL = "https://zippy.gfycat.com/" + gfycatType1 + ".mp4";
 
@@ -201,7 +207,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
 
 
     void doStuff(String data) {
-        task.setData(getApplicationContext(), data);
+        task.setData(getApplicationContext(), data, progressBar);
         task.videoDownloadResponse = this;
         task.execute();
     }
