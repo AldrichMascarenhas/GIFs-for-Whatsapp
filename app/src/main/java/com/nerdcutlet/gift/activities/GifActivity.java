@@ -42,9 +42,13 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
     ImageView gifImage;
     VideoView videoView;
     ProgressBar progressBar;
-    
 
+    boolean canBeSaved = false;
+    Bundle extras;
     VideoAsyncTask task = new VideoAsyncTask();
+
+
+    String giphyType1, giphyType2, gfycatType1, gfycatType2, gfycatType3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         gifImage = (ImageView) findViewById(R.id.gif_image);
         videoView = (VideoView) findViewById(R.id.videoView1);
 
-         progressBar = (ProgressBar)findViewById(R.id.gif_progress);
+        progressBar = (ProgressBar) findViewById(R.id.gif_progress);
         View gifblankview = (View) findViewById(R.id.gif_blank_view);
         NestedScrollView gifscrollview = (NestedScrollView) findViewById(R.id.gif_scrollview);
 
@@ -64,19 +68,19 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         if (getIntent().getBooleanExtra(DeepLink.IS_DEEP_LINK, false)) {
             Bundle parameters = getIntent().getExtras();
 
-            String giphyType1 = parameters.getString("giphyType1");     //https://giphy.com/gifs/{giphyType1}
+            giphyType1 = parameters.getString("giphyType1");     //https://giphy.com/gifs/{giphyType1}
             Log.d(LOG_TAG, "giphyType1 : " + giphyType1);
 
-            String giphyType2 = parameters.getString("giphyType2");     //https://giphy.com/gifs/{giphyType2}/html5
+            giphyType2 = parameters.getString("giphyType2");     //https://giphy.com/gifs/{giphyType2}/html5
             Log.d(LOG_TAG, "giphyType2 : " + giphyType2);
 
-            String gfycatType1 = parameters.getString("gfycatType1");   //https://gfycat.com/{gfycatType1}
+            gfycatType1 = parameters.getString("gfycatType1");   //https://gfycat.com/{gfycatType1}
             Log.d(LOG_TAG, "gfycatType1 : " + gfycatType1);
 
-            String gfycatType2 = parameters.getString("gfycatType2");   //https://zippy.gfycat.com/{gfycatType2}
+            gfycatType2 = parameters.getString("gfycatType2");   //https://zippy.gfycat.com/{gfycatType2}
             Log.d(LOG_TAG, "gfycatType2 : " + gfycatType2);
 
-            String gfycatType3 = parameters.getString("gfycatType3");   //https://giant.gfycat.com/{gfycatType3}
+            gfycatType3 = parameters.getString("gfycatType3");   //https://giant.gfycat.com/{gfycatType3}
             Log.d(LOG_TAG, "gfycatType3 : " + gfycatType3);
 
 
@@ -86,8 +90,11 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
 
         //Run this only when Internal Activity Passes Data.
         Intent i = getIntent();
-        Bundle extras = i.getExtras();
+        extras = i.getExtras();
         if (extras.containsKey("getId")) {
+
+            canBeSaved = true;
+
             i.getStringExtra("getRating");
             i.getStringExtra("getImportDatetime");
             i.getStringExtra("getTrendingDatetime");
@@ -160,9 +167,26 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
             public void onClick(View v) {
                 Log.d(LOG_TAG, "GIF ID before save : " + gifID);
 
+                String igifID;
+                if (canBeSaved) {
+                    //TODO Make sure When saving the value isn't already in the database
+                    if (extras.containsKey("getId")) {
+                        igifID = gifID;
+                        FavouriteGif favouriteGif = new FavouriteGif(igifID);
+                        favouriteGif.save();
+                    } else if (giphyType1 != null) {
+                        FavouriteGif favouriteGif = new FavouriteGif(giphyType1);
+                        favouriteGif.save();
+                    } else if (giphyType2 != null){
+                        FavouriteGif favouriteGif = new FavouriteGif(giphyType2);
+                        favouriteGif.save();
+                    }
 
-                FavouriteGif favouriteGif = new FavouriteGif(gifID.toString());
-                favouriteGif.save();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Cannot be saved", Toast.LENGTH_LONG).show();
+
+                }
+
 
             }
         });
@@ -172,6 +196,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         String builtURL = null;
 
         if (giphyType1 != null) {
+            canBeSaved = true;
             builtURL = "https://media2.giphy.com/media/" + giphyType1 + "/200.mp4";
 
 
@@ -181,6 +206,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
                     .into(gifImage);
 
         } else if (giphyType2 != null) {
+            canBeSaved = true;
             builtURL = "https://media2.giphy.com/media/" + giphyType2 + "/200.mp4";
 
 
