@@ -20,19 +20,24 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.airbnb.deeplinkdispatch.DeepLink;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.models.FavouriteGif;
 import com.nerdcutlet.gift.other.adapters.VideoAsyncTask;
 import com.nerdcutlet.gift.utils.Utils;
 import com.nerdcutlet.gift.utils.VideoDownloadResponse;
 import com.squareup.picasso.Picasso;
+
 import static com.orm.SugarRecord.save;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 
+@DeepLink({"https://giphy.com/gifs/{giphyType1}", "https://giphy.com/gifs/{giphyType2}/html5",
+        "https://gfycat.com/{gfycatType1}", "https://zippy.gfycat.com/{gfycatType2}", "https://giant.gfycat.com/{gfycatType3}"})
 public class GifActivity extends Activity implements VideoDownloadResponse {
 
     public final static String LOG_TAG = "GifActivity";
@@ -40,40 +45,14 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
     DisplayMetrics display;
     int mwidth, mheight;
 
-    String data;
+    String data, url;
     String gifID;
 
     String localurl;
 
     ImageView gifImage;
     VideoView videoView;
-    @Override
-    public void localVideoUrl(String videoUrl) {
-        localurl = videoUrl;
-        Log.d(LOG_TAG, localurl);
-        gifImage.setVisibility(View.GONE);
-        videoView.setVisibility(View.VISIBLE);
 
-        //Creating MediaController
-        MediaController mediaController= new MediaController(this);
-        mediaController.setAnchorView(videoView);
-
-        //specify the location of media file
-        Uri uri= Uri.parse(localurl);
-
-        //Setting MediaController and URI, then starting the videoView
-        videoView.setMediaController(mediaController);
-
-        videoView.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
-        videoView.setVideoURI(uri);
-        videoView.requestFocus();
-        videoView.start();
-    }
 
     VideoAsyncTask task = new VideoAsyncTask();
 
@@ -82,44 +61,73 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gif);
 
-         gifImage = (ImageView) findViewById(R.id.gif_image);
-         videoView =(VideoView)findViewById(R.id.videoView1);
 
-        Intent i = getIntent();
-        i.getStringExtra("getRating");
-        i.getStringExtra("getImportDatetime");
-        i.getStringExtra("getTrendingDatetime");
-        data = i.getStringExtra("getMp4");
-        i.getStringExtra("getMp4Size");
-        i.getStringExtra("getWebp");
-        i.getStringExtra("getWebpSize");
-        String url = i.getStringExtra("getStillUrl");
-        i.getStringExtra("getWidth");
-        i.getStringExtra("getHeight");
-        gifID = i.getStringExtra("getId");
-
-
-        Log.d(LOG_TAG, i.getStringExtra("getRating") + " " +
-                i.getStringExtra("getImportDatetime") + " " +
-                i.getStringExtra("getTrendingDatetime") + " " +
-                i.getStringExtra("getMp4") + " " +
-                i.getStringExtra("getMp4Size") + " " +
-                i.getStringExtra("getWebp") + " " +
-                i.getStringExtra("getWebpSize") + " " +
-                i.getStringExtra("getStillUrl") + " " +
-                i.getStringExtra("getWidth") + " " +
-                i.getStringExtra("getHeight") + " ");
-
-
-        Picasso.with(getApplicationContext())
-                .load(url)
-                .placeholder(R.color.colorAccent)
-                .into(gifImage);
-
+        gifImage = (ImageView) findViewById(R.id.gif_image);
+        videoView = (VideoView) findViewById(R.id.videoView1);
 
         View gifblankview = (View) findViewById(R.id.gif_blank_view);
         NestedScrollView gifscrollview = (NestedScrollView) findViewById(R.id.gif_scrollview);
-        ImageView imgview = (ImageView) findViewById(R.id.gif_image);
+
+
+        //DeepLink Stuff
+        if (getIntent().getBooleanExtra(DeepLink.IS_DEEP_LINK, false)) {
+            Bundle parameters = getIntent().getExtras();
+
+            String giphyType1 = parameters.getString("giphyType1");     //https://giphy.com/gifs/{giphyType1}
+            Log.d(LOG_TAG, "giphyType1 : " + giphyType1);
+
+            String giphyType2 = parameters.getString("giphyType2");     //https://giphy.com/gifs/{giphyType2}/html5
+            Log.d(LOG_TAG, "giphyType2 : " + giphyType2);
+
+            String gfycatType1 = parameters.getString("gfycatType1");   //https://gfycat.com/{gfycatType1}
+            Log.d(LOG_TAG, "gfycatType1 : " + gfycatType1);
+
+            String gfycatType2 = parameters.getString("gfycatType2");   //https://zippy.gfycat.com/{gfycatType2}
+            Log.d(LOG_TAG, "gfycatType2 : " + gfycatType2);
+
+            String gfycatType3 = parameters.getString("gfycatType3");   //https://giant.gfycat.com/{gfycatType3}
+            Log.d(LOG_TAG, "gfycatType3 : " + gfycatType3);
+
+
+            buildGifUrl(giphyType1, giphyType2, gfycatType1, gfycatType2, gfycatType3);
+
+        }
+
+        //Run this only when Internal Activity Passes Data.
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+        if (extras.containsKey("getId")) {
+            i.getStringExtra("getRating");
+            i.getStringExtra("getImportDatetime");
+            i.getStringExtra("getTrendingDatetime");
+            data = i.getStringExtra("getMp4");
+            i.getStringExtra("getMp4Size");
+            i.getStringExtra("getWebp");
+            i.getStringExtra("getWebpSize");
+            url = i.getStringExtra("getStillUrl");
+            i.getStringExtra("getWidth");
+            i.getStringExtra("getHeight");
+            gifID = i.getStringExtra("getId");
+
+
+            Log.d(LOG_TAG, i.getStringExtra("getRating") + " " +
+                    i.getStringExtra("getImportDatetime") + " " +
+                    i.getStringExtra("getTrendingDatetime") + " " +
+                    i.getStringExtra("getMp4") + " " +
+                    i.getStringExtra("getMp4Size") + " " +
+                    i.getStringExtra("getWebp") + " " +
+                    i.getStringExtra("getWebpSize") + " " +
+                    i.getStringExtra("getStillUrl") + " " +
+                    i.getStringExtra("getWidth") + " " +
+                    i.getStringExtra("getHeight") + " ");
+
+            Picasso.with(getApplicationContext())
+                    .load(url)
+                    .placeholder(R.color.colorAccent)
+                    .into(gifImage);
+
+            doStuff(data);
+        }
 
 
         display = getApplicationContext().getResources().getDisplayMetrics();
@@ -143,20 +151,19 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         gifscrollview.requestLayout();
 
 
-
-        Button testb = (Button)findViewById(R.id.test_btn);
+        Button testb = (Button) findViewById(R.id.test_btn);
         testb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getApplicationContext(), "HI",Toast.LENGTH_LONG).show();
-                doStuff();
+                Toast.makeText(getApplicationContext(), "This will Save Video Offline", Toast.LENGTH_LONG).show();
+
 
             }
         });
 
 
-        Button fav_btn = (Button)findViewById(R.id.fav_btn);
+        Button fav_btn = (Button) findViewById(R.id.fav_btn);
         fav_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,10 +177,61 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         });
     }
 
-    void doStuff(){
+    void buildGifUrl(String giphyType1, String giphyType2, String gfycatType1, String gfycatType2, String gfycatType3) {
+        String builtURL = null;
+
+        if (giphyType1 != null) {
+            builtURL = "https://media2.giphy.com/media/" + giphyType1 + "/200.mp4";
+        } else if (giphyType2 != null) {
+            builtURL = "https://media2.giphy.com/media/" + giphyType2 + "/200.mp4";
+        } else if (gfycatType1 != null) {
+            builtURL = "https://zippy.gfycat.com/" + gfycatType1 + ".mp4";
+
+        } else if (gfycatType2 != null) {
+            builtURL = "https://zippy.gfycat.com/" + gfycatType2;
+
+        } else if (gfycatType3 != null) {
+            builtURL = "https://giant.gfycat.com/" + gfycatType3;
+
+        }
+
+        Log.d(LOG_TAG, "builtURL : " + builtURL);
+        doStuff(builtURL);
+    }
+
+
+    void doStuff(String data) {
         task.setData(getApplicationContext(), data);
         task.videoDownloadResponse = this;
         task.execute();
+    }
+
+    @Override
+    public void localVideoUrl(String videoUrl) {
+        localurl = videoUrl;
+        Log.d(LOG_TAG, localurl);
+        gifImage.setVisibility(View.GONE);
+        videoView.setVisibility(View.VISIBLE);
+
+        //Creating MediaController
+        MediaController mediaController = new MediaController(this);
+        mediaController.setAnchorView(videoView);
+
+        //specify the location of media file
+        Uri uri = Uri.parse(localurl);
+
+        //Setting MediaController and URI, then starting the videoView
+        videoView.setMediaController(mediaController);
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+        videoView.setVideoURI(uri);
+        videoView.requestFocus();
+        videoView.start();
     }
 }
 
