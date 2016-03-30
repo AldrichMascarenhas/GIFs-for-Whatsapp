@@ -3,6 +3,7 @@ package com.nerdcutlet.gift.other;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.nerdcutlet.gift.BuildConfig;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.models.giphy.GIFModelMain;
@@ -46,6 +47,13 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
     }
 
+    public void setData(String search, int typeOfData) {
+
+        this.searchParameter = search;
+        this.typeOfData = typeOfData;
+    }
+
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -57,7 +65,7 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
         Call<GIFModelMain> gifCall;
         Call<GIFModelMain> stickerCall;
         Call<GIFModelMain> trendingCall;
-
+        Call<GIFModelMain> gifsByIdCall;
         if (typeOfData == 0) {
             gifCall = interf.searchGifs(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(gifCall);
@@ -70,6 +78,9 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
             trendingCall = interf.getTrendingGifs(rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(trendingCall);
 
+        } else if (typeOfData == 3) {
+            gifsByIdCall = interf.getGifsByID(searchParameter, BuildConfig.GIPHY_API_TOKEN);
+            FetchData(gifsByIdCall);
         }
 
         return null;
@@ -97,14 +108,14 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
                     asyncTaskResponse.processFinish(result.getData());
 
-
-                    //adapter.setmGIFDataList(p);
                     /*
+                    Uncomment to Log Respone + API Call
+                    Log.d(LOG_TAG, "API Call = " + call.request().url().toString());
                     Log.d(LOG_TAG, "response = " + new Gson().toJson(result));
-                    for (int x = 0; x < p.size(); x++) {
-                        Log.d(LOG_TAG, "id : " + p.get(x).getId());
-                    }
-                    */
+                     */
+
+
+
                 } else {
                     //request not successful (like 400,401,403 etc)
                     //Handle errors
