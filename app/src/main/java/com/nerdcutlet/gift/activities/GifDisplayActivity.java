@@ -96,9 +96,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
                 gifIntent.putExtra("getWebp",selectedDatum.getImages().getFixedHeight().getWebp() );
                 gifIntent.putExtra("getWebpSize",selectedDatum.getImages().getFixedHeight().getWebpSize() );
 
-                gifIntent.putExtra("getStillUrl",selectedDatum.getImages().getFixedHeightStill().getUrl()
-
-                );
+                gifIntent.putExtra("getStillUrl",selectedDatum.getImages().getFixedHeightStill().getUrl());
                 gifIntent.putExtra("getWidth", selectedDatum.getImages().getFixedHeight().getWidth());
                 gifIntent.putExtra("getHeight", selectedDatum.getImages().getFixedHeight().getHeight());
 
