@@ -92,6 +92,12 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.fav_button)
     Button fav_button;
 
+    @OnClick(R.id.fav_button)
+    public void launchFavActivity(){
+        Intent i = new Intent(this, FavActivity.class);
+        startActivity(i);
+    }
+
     @Bind(R.id.trending_button)
     Button trending_button;
 
