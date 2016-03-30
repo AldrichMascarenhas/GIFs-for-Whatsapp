@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_gif_display">GifDisplayActivity</string>
 
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -31,6 +32,7 @@
     <string name="fav_gif">Favourite</string>
 
     <string name="storage_filepath">GifStorage</string>
+    <string name="title_activity_fav">FavActivity</string>
 
 
 </resources>
