@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.trending_button)
     void trendingButtonClick(){
         typeOfData = 2;
-        sendMessage("fake_data", typeOfData);
+        sendMessage("trendingGif", typeOfData);
     }
 
     @OnClick(R.id.random_gif_button)

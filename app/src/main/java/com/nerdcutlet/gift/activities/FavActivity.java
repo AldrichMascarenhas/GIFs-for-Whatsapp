@@ -123,7 +123,7 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
 
         if(!books.isEmpty()){
             for(int i =0; i< books.size(); i++){
-                ids.add(books.get(i).getGifId());
+                ids.add(books.get(i).getmGifID());
             }
         }else{
             Toast.makeText(getApplicationContext(), "No fav gifs",Toast.LENGTH_LONG).show();
