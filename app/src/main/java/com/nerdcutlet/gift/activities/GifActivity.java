@@ -25,6 +25,8 @@ import com.nerdcutlet.gift.utils.Utils;
 import com.nerdcutlet.gift.utils.VideoDownloadResponse;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+
 @DeepLink({"https://giphy.com/gifs/{giphyType1}", "https://giphy.com/gifs/{giphyType2}/html5",
         "https://gfycat.com/{gfycatType1}", "https://zippy.gfycat.com/{gfycatType2}", "https://giant.gfycat.com/{gfycatType3}"})
 public class GifActivity extends Activity implements VideoDownloadResponse {
@@ -34,8 +36,15 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
     DisplayMetrics display;
     int mwidth, mheight;
 
-    String data, url;
-    String gifID;
+
+    String gifRating, gifImportDatetime, gifTrendingDatetime, gifMp4, gifWebp, gifStillUrl;
+    String gifMp4Size, gifWebpSize, gifWidth, gifHeight, gifId;
+    int typeOfData;
+    String searchData;
+
+
+    Calendar calendar;
+    String currentDate;
 
     String localurl;
 
@@ -54,6 +63,9 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gif);
+
+
+
 
 
         gifImage = (ImageView) findViewById(R.id.gif_image);
@@ -93,38 +105,33 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         extras = i.getExtras();
         if (extras.containsKey("getId")) {
 
+
+            Log.d(LOG_TAG, "type of data : " + i.getIntExtra("typeOfData", 100));
             canBeSaved = true;
 
-            i.getStringExtra("getRating");
-            i.getStringExtra("getImportDatetime");
-            i.getStringExtra("getTrendingDatetime");
-            data = i.getStringExtra("getMp4");
-            i.getStringExtra("getMp4Size");
-            i.getStringExtra("getWebp");
-            i.getStringExtra("getWebpSize");
-            url = i.getStringExtra("getStillUrl");
-            i.getStringExtra("getWidth");
-            i.getStringExtra("getHeight");
-            gifID = i.getStringExtra("getId");
 
+            gifRating = i.getStringExtra("getRating");
+            gifImportDatetime = i.getStringExtra("getImportDatetime");
+            gifTrendingDatetime = i.getStringExtra("getTrendingDatetime");
+            gifMp4 = i.getStringExtra("getMp4");
+            gifMp4Size = i.getStringExtra("getMp4Size");
+            gifWebp = i.getStringExtra("getWebp");
+            gifWebpSize = i.getStringExtra("getWebpSize");
+            gifStillUrl = i.getStringExtra("getStillUrl");
+            gifWidth = i.getStringExtra("getWidth");
+            gifHeight = i.getStringExtra("getHeight");
+            gifId = i.getStringExtra("getId");
 
-            Log.d(LOG_TAG, i.getStringExtra("getRating") + " " +
-                    i.getStringExtra("getImportDatetime") + " " +
-                    i.getStringExtra("getTrendingDatetime") + " " +
-                    i.getStringExtra("getMp4") + " " +
-                    i.getStringExtra("getMp4Size") + " " +
-                    i.getStringExtra("getWebp") + " " +
-                    i.getStringExtra("getWebpSize") + " " +
-                    i.getStringExtra("getStillUrl") + " " +
-                    i.getStringExtra("getWidth") + " " +
-                    i.getStringExtra("getHeight") + " ");
+            typeOfData = i.getIntExtra("typeOfData", 0);
+            searchData = i.getStringExtra("searchData");
+
 
             Picasso.with(getApplicationContext())
-                    .load(url)
+                    .load(gifStillUrl)
                     .placeholder(R.color.colorAccent)
                     .into(gifImage);
 
-            doStuff(data);
+            doStuff(gifMp4);
         }
 
 
@@ -165,20 +172,23 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         fav_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG, "GIF ID before save : " + gifID);
 
-                String igifID;
+                calendar = Calendar.getInstance();
+                currentDate = utils.getDateTime(calendar);
+
+                //String mGifID, int mTypeOfData, String mTag, String mDate
                 if (canBeSaved) {
                     //TODO Make sure When saving the value isn't already in the database
                     if (extras.containsKey("getId")) {
-                        igifID = gifID;
-                        FavouriteGif favouriteGif = new FavouriteGif(igifID);
+                        FavouriteGif favouriteGif = new FavouriteGif(gifId, typeOfData, searchData, currentDate);
                         favouriteGif.save();
                     } else if (giphyType1 != null) {
-                        FavouriteGif favouriteGif = new FavouriteGif(giphyType1);
+                        searchData = "receivedGif";
+                        FavouriteGif favouriteGif = new FavouriteGif(giphyType1, typeOfData, searchData, currentDate);
                         favouriteGif.save();
-                    } else if (giphyType2 != null){
-                        FavouriteGif favouriteGif = new FavouriteGif(giphyType2);
+                    } else if (giphyType2 != null) {
+                        searchData = "receivedGif";
+                        FavouriteGif favouriteGif = new FavouriteGif(giphyType2, typeOfData, searchData, currentDate);
                         favouriteGif.save();
                     }
 
@@ -245,15 +255,9 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         gifImage.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
 
-        //Creating MediaController
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(videoView);
 
         //specify the location of media file
         Uri uri = Uri.parse(localurl);
-
-        //Setting MediaController and URI, then starting the videoView
-        videoView.setMediaController(mediaController);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
