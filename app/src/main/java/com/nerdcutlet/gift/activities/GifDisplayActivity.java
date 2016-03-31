@@ -100,6 +100,8 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
                 gifIntent.putExtra("getWidth", selectedDatum.getImages().getFixedHeight().getWidth());
                 gifIntent.putExtra("getHeight", selectedDatum.getImages().getFixedHeight().getHeight());
 
+                gifIntent.putExtra("typeOfData", typeOfData);
+                gifIntent.putExtra("searchData", searchData);
                 startActivity(gifIntent);
             }
         });
