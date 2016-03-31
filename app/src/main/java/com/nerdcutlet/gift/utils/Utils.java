@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
+import java.util.Calendar;
 
 /**
  * Created by Aldrich on 25-03-2016.
@@ -39,6 +42,32 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+
+
+    public  String  getDateTime(Calendar cal){
+        /*
+        *FORMAT :   'YYYY-mm-dd hh:mm:ss'
+        *            24 hour format
+        *           '2015-08-11 13:13:00' (time for 1:13pm exactly).
+        *
+        */
+        int hourofday = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+
+
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int dayofmonth = cal.get(Calendar.DAY_OF_MONTH);
+
+        String date = year + "-" +month + "-" + dayofmonth + " " + hourofday + ":" + minute + ":" + second;
+
+            Log.d("Utils", date);
+            Log.d("Utils",  hourofday + " " + minute + " " + second);
+            Log.d("Utils",  year + " " + month + " " + dayofmonth);
+        return  date;
     }
 
 }
