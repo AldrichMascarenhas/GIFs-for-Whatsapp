@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add new category" />
+
+    <AutoCompleteTextView
+        android:id="@+id/gif_category_Add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ex. Crying" />
+
+    <Button
+        android:id="@+id/button_category_Add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="or" />
+
+    <ListView
+        android:id="@+id/category_listview"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="#666666"    />
+        <!-- Last 2 attributes used to select item -->
+
+
+
+    <Button
+        android:id="@+id/set_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set" />
+
+
+</LinearLayout>
