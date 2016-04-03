@@ -1,5 +1,6 @@
 package com.nerdcutlet.gift.activities;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,12 +10,17 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nerdcutlet.gift.BuildConfig;
 import com.nerdcutlet.gift.R;
+import com.nerdcutlet.gift.fragments.FavouriteFilterFragment;
+import com.nerdcutlet.gift.fragments.FilterFragment;
 import com.nerdcutlet.gift.models.FavouriteGif;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.models.giphy.GIFModelMain;
@@ -34,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FavActivity extends AppCompatActivity implements AsyncTaskResponse {
+public class FavActivity extends AppCompatActivity implements AsyncTaskResponse , FavouriteFilterFragment.OnFilterSelectedListener{
 
     public AsyncTaskResponse asyncTaskResponse = null;
 
@@ -42,6 +48,10 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
     private RecyclerView mRecyclerView;
     private MyRecyclerAdapter adapter;
 
+    @Override
+    public void onFilterSelected() {
+
+    }
 
     String searchData;
     int typeOfData = 3;
@@ -63,7 +73,7 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gif_display);
+        setContentView(R.layout.activity_gif_fav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -140,5 +150,31 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
 
         return listString;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_favourite_filter, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_filter) {
+            FragmentManager fm = getFragmentManager();
+            FavouriteFilterFragment dialogFragment = new FavouriteFilterFragment();
+            dialogFragment.show(fm, "Fragment");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }
