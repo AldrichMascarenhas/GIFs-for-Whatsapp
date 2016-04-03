@@ -33,6 +33,16 @@ public class FavouriteGif extends SugarRecord {
     1 - Stickers [in app search ONLY]
      */
 
+    String mCategory;
+
+    public String getmCategory() {
+        return mCategory;
+    }
+
+    public void setmCategory(String mCategory) {
+        this.mCategory = mCategory;
+    }
+
     public int getmTypeOfData() {
         return mTypeOfData;
     }
@@ -41,12 +51,12 @@ public class FavouriteGif extends SugarRecord {
         this.mTypeOfData = mTypeOfData;
     }
 
-    public FavouriteGif(String mGifID, int mTypeOfData, String mTag, String mDate) {
+    public FavouriteGif(String mGifID, int mTypeOfData, String mTag, String mDate, String mCategory) {
         this.mGifID = mGifID;
         this.mTypeOfData = mTypeOfData;
         this.mTag = mTag;
-
         this.mDate = mDate;
+        this.mCategory = mCategory;
     }
 
     public String getmGifID() {
