@@ -1,6 +1,7 @@
 package com.nerdcutlet.gift.activities;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -19,6 +20,9 @@ import android.widget.VideoView;
 
 import com.airbnb.deeplinkdispatch.DeepLink;
 import com.nerdcutlet.gift.R;
+import com.nerdcutlet.gift.fragments.CategoryFilterFragment;
+import com.nerdcutlet.gift.fragments.FavouriteFilterFragment;
+import com.nerdcutlet.gift.fragments.FilterFragment;
 import com.nerdcutlet.gift.models.FavouriteGif;
 import com.nerdcutlet.gift.other.VideoAsyncTask;
 import com.nerdcutlet.gift.utils.Utils;
@@ -29,12 +33,13 @@ import java.util.Calendar;
 
 @DeepLink({"https://giphy.com/gifs/{giphyType1}", "https://giphy.com/gifs/{giphyType2}/html5",
         "https://gfycat.com/{gfycatType1}", "https://zippy.gfycat.com/{gfycatType2}", "https://giant.gfycat.com/{gfycatType3}"})
-public class GifActivity extends Activity implements VideoDownloadResponse {
+public class GifActivity extends Activity implements VideoDownloadResponse, CategoryFilterFragment.OnFilterSelectedListener {
 
     public final static String LOG_TAG = "GifActivity";
     Utils utils = new Utils();
     DisplayMetrics display;
     int mwidth, mheight;
+
 
 
     String gifRating, gifImportDatetime, gifTrendingDatetime, gifMp4, gifWebp, gifStillUrl;
@@ -56,6 +61,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
     Bundle extras;
     VideoAsyncTask task = new VideoAsyncTask();
 
+    String category;
 
     String giphyType1, giphyType2, gfycatType1, gfycatType2, gfycatType3;
 
@@ -106,7 +112,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
         if (extras.containsKey("getId")) {
 
 
-            Log.d(LOG_TAG, "type of data : " + i.getIntExtra("typeOfData", 100));
+            Log.d(LOG_TAG, "type of data : " + i.getIntExtra("typeOfData", 100)); //When FAv Gif is launched
             canBeSaved = true;
 
 
@@ -178,19 +184,12 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
 
                 //String mGifID, int mTypeOfData, String mTag, String mDate
                 if (canBeSaved) {
-                    //TODO Make sure When saving the value isn't already in the database
-                    if (extras.containsKey("getId")) {
-                        FavouriteGif favouriteGif = new FavouriteGif(gifId, typeOfData, searchData, currentDate);
-                        favouriteGif.save();
-                    } else if (giphyType1 != null) {
-                        searchData = "receivedGif";
-                        FavouriteGif favouriteGif = new FavouriteGif(giphyType1, typeOfData, searchData, currentDate);
-                        favouriteGif.save();
-                    } else if (giphyType2 != null) {
-                        searchData = "receivedGif";
-                        FavouriteGif favouriteGif = new FavouriteGif(giphyType2, typeOfData, searchData, currentDate);
-                        favouriteGif.save();
-                    }
+
+                    FragmentManager fm = getFragmentManager();
+                    CategoryFilterFragment dialogFragment = new CategoryFilterFragment();
+                    dialogFragment.show(fm, "Fragment");
+
+                    //Handle Setting in OnFilterSelected
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Cannot be saved", Toast.LENGTH_LONG).show();
@@ -239,6 +238,27 @@ public class GifActivity extends Activity implements VideoDownloadResponse {
 
         Log.d(LOG_TAG, "builtURL : " + builtURL);
         doStuff(builtURL);
+    }
+
+    @Override
+    public void onFilterSelected(String mcategory) {
+        this.category = mcategory;
+
+        //TODO Make sure When saving the value isn't already in the database
+        if (extras.containsKey("getId")) {
+
+            FavouriteGif favouriteGif = new FavouriteGif(gifId, typeOfData, searchData, currentDate, category);
+            favouriteGif.save();
+        } else if (giphyType1 != null) {
+            searchData = "receivedGif";
+            FavouriteGif favouriteGif = new FavouriteGif(giphyType1, typeOfData, searchData, currentDate, category);
+            favouriteGif.save();
+        } else if (giphyType2 != null) {
+            searchData = "receivedGif";
+            FavouriteGif favouriteGif = new FavouriteGif(giphyType2, typeOfData, searchData, currentDate,  category);
+            favouriteGif.save();
+        }
+
     }
 
 
