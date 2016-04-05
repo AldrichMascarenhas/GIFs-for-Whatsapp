@@ -2,9 +2,12 @@ package com.nerdcutlet.gift.activities;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -71,9 +74,22 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         setContentView(R.layout.activity_gif);
 
 
+        FloatingActionButton fab_activity_gif_share = (FloatingActionButton)findViewById(R.id.fab_activity_gif_share);
+        fab_activity_gif_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String url = "https://giphy.com/gifs/" + gifId;
+
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("text", url);
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(getApplicationContext(), "Copied to clipboard!", Toast.LENGTH_LONG).show();
 
 
-
+            }
+        });
         gifImage = (ImageView) findViewById(R.id.gif_image);
         videoView = (VideoView) findViewById(R.id.videoView1);
 
@@ -258,6 +274,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
             FavouriteGif favouriteGif = new FavouriteGif(giphyType2, typeOfData, searchData, currentDate,  category);
             favouriteGif.save();
         }
+        //TODO: Snackbar here
 
     }
 
