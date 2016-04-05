@@ -108,13 +108,13 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
                     asyncTaskResponse.processFinish(result.getData());
 
+
                     /*
                     Uncomment to Log Respone + API Call
                     Log.d(LOG_TAG, "API Call = " + call.request().url().toString());
                     Log.d(LOG_TAG, "response = " + new Gson().toJson(result));
                      */
-
-
+                    
 
                 } else {
                     //request not successful (like 400,401,403 etc)
