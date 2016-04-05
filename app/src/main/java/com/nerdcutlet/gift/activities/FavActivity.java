@@ -40,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FavActivity extends AppCompatActivity implements AsyncTaskResponse , FavouriteFilterFragment.OnFilterSelectedListener{
+public class FavActivity extends AppCompatActivity implements AsyncTaskResponse, FavouriteFilterFragment.OnFilterSelectedListener {
 
     public AsyncTaskResponse asyncTaskResponse = null;
 
@@ -48,20 +48,20 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
     private RecyclerView mRecyclerView;
     private MyRecyclerAdapter adapter;
 
-    @Override
-    public void onFilterSelected() {
-
-    }
 
     String searchData;
     int typeOfData = 3;
     List<Datum> datums;
 
+    int favGifType;
+    String favCategory;
 
     @Override
     public void processFinish(List<Datum> p) {
+        datums.clear();
         datums = p;
         adapter.setmGIFDataList(p);
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -100,16 +100,16 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
                 Intent gifIntent = new Intent(getApplicationContext(), GifActivity.class);
 
                 gifIntent.putExtra("getId", selectedDatum.getId());
-                gifIntent.putExtra("getRating",selectedDatum.getRating());
-                gifIntent.putExtra("getImportDatetime",selectedDatum.getImportDatetime());
-                gifIntent.putExtra("getTrendingDatetime",selectedDatum.getTrendingDatetime());
+                gifIntent.putExtra("getRating", selectedDatum.getRating());
+                gifIntent.putExtra("getImportDatetime", selectedDatum.getImportDatetime());
+                gifIntent.putExtra("getTrendingDatetime", selectedDatum.getTrendingDatetime());
 
                 gifIntent.putExtra("getMp4", selectedDatum.getImages().getFixedHeight().getMp4());
                 gifIntent.putExtra("getMp4Size", selectedDatum.getImages().getFixedHeight().getMp4Size());
-                gifIntent.putExtra("getWebp",selectedDatum.getImages().getFixedHeight().getWebp() );
-                gifIntent.putExtra("getWebpSize",selectedDatum.getImages().getFixedHeight().getWebpSize() );
+                gifIntent.putExtra("getWebp", selectedDatum.getImages().getFixedHeight().getWebp());
+                gifIntent.putExtra("getWebpSize", selectedDatum.getImages().getFixedHeight().getWebpSize());
 
-                gifIntent.putExtra("getStillUrl",selectedDatum.getImages().getFixedHeightStill().getUrl());
+                gifIntent.putExtra("getStillUrl", selectedDatum.getImages().getFixedHeightStill().getUrl());
                 gifIntent.putExtra("getWidth", selectedDatum.getImages().getFixedHeight().getWidth());
                 gifIntent.putExtra("getHeight", selectedDatum.getImages().getFixedHeight().getHeight());
 
@@ -120,35 +120,72 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
 
         mRecyclerView.setAdapter(adapter);
 
-        task.setData(getGifIdsFromDatabase(), typeOfData);
+        task.setData(getGifIdsFromDatabase(4), typeOfData); //By default show all saved, //Fav API call
         task.asyncTaskResponse = this;
         task.execute();
 
 
     }
 
-    String getGifIdsFromDatabase(){
-        List<FavouriteGif> books = FavouriteGif.listAll(FavouriteGif.class);
+    String getGifIdsFromDatabase(int favGifType) {
+        /*
+        Random - Type 0;
+        Trending - Type 1;
+        Received - Type 2;
+        Category - Type 3;
+        */
+        List<FavouriteGif> books = new ArrayList<>();
+
+        if (favGifType == 0) {
+            //Todo: random gifs
+        } else if (favGifType == 1) {
+            books = FavouriteGif.find(FavouriteGif.class, "M_TAG = ?", "trendingGif");
+
+        } else if (favGifType == 2) {
+            books = FavouriteGif.find(FavouriteGif.class, "M_TAG = ?", "receivedGif");
+
+        } else if (favGifType == 3) {
+            books = FavouriteGif.find(FavouriteGif.class, "M_CATEGORY = ?", favCategory);
+        } else if (favGifType == 4) {
+            books = FavouriteGif.listAll(FavouriteGif.class);
+        }
         ArrayList<String> ids = new ArrayList<>();
 
-        if(!books.isEmpty()){
-            for(int i =0; i< books.size(); i++){
+        if (!books.isEmpty()) {
+            for (int i = 0; i < books.size(); i++) {
                 ids.add(books.get(i).getmGifID());
             }
-        }else{
-            Toast.makeText(getApplicationContext(), "No fav gifs",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "No fav gifs", Toast.LENGTH_LONG).show();
         }
 
 
         Log.d(LOG_TAG, "Array List Size  : " + ids.size());
         String listString = "";
-        for(int i = 0; i<ids.size(); i++){
+        for (int i = 0; i < ids.size(); i++) {
             listString = listString + "," + ids.get(i);
         }
         listString = listString.replaceFirst(",", "");
         Log.d(LOG_TAG, "String : " + listString);
 
         return listString;
+    }
+
+    @Override
+    public void onFilterSelected(int typeOfData, String searchData) {
+
+        favGifType = typeOfData;
+        favCategory = searchData;
+        String data = getGifIdsFromDatabase(favGifType);
+
+        AsyncHttpTask task = new AsyncHttpTask();
+
+
+        task.setData(data, typeOfData); //By default show all saved, //Fav API call
+        task.asyncTaskResponse = this;
+        task.execute();
+
+        //Toast.makeText(getApplicationContext(), searchData + " " + typeOfData, Toast.LENGTH_LONG).show();
     }
 
     @Override
