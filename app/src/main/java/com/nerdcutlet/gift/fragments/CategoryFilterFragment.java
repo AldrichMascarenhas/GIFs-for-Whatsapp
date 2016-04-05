@@ -33,6 +33,10 @@ public class CategoryFilterFragment extends DialogFragment {
 
     public final static String LOG_TAG = "CategoryFilterFragment";
 
+    ArrayAdapter<String> adapter;
+    ListView categoryListView;
+    AutoCompleteTextView autoCompleteTextView;
+
     OnFilterSelectedListener mCallback;
     String category;
 
@@ -41,12 +45,14 @@ public class CategoryFilterFragment extends DialogFragment {
         View rootView = inflater.inflate(R.layout.fragment_category_filter, container, false);
         ButterKnife.bind(this, rootView);
 
-        final ListView categoryListView = (ListView) rootView.findViewById(R.id.category_listview);
-        final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView)rootView.findViewById(R.id.gif_category_Add);
+        categoryListView = (ListView) rootView.findViewById(R.id.category_listview);
+        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.gif_category_Add);
 
-        Button button_category_Add = (Button)rootView.findViewById(R.id.button_category_Add);
+        updateListView();
 
-        Button set_filter = (Button)rootView.findViewById(R.id.set_filter);
+        Button button_category_Add = (Button) rootView.findViewById(R.id.button_category_Add);
+
+        Button set_filter = (Button) rootView.findViewById(R.id.set_filter);
         set_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +62,6 @@ public class CategoryFilterFragment extends DialogFragment {
                 dismiss();
             }
         });
-
 
 
         button_category_Add.setOnClickListener(new View.OnClickListener() {
@@ -69,23 +74,9 @@ public class CategoryFilterFragment extends DialogFragment {
                 Categories categories = new Categories(category);
                 categories.save();
 
-
-
+                updateListView();
             }
         });
-
-        List<Categories> categories = Categories.listAll(Categories.class);
-        ArrayList<String> categoriesList = new ArrayList<>();
-
-        if(!categories.isEmpty()){
-            for(int i =0; i< categories.size(); i++){
-                categoriesList.add(categories.get(i).getGifCategory());
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, categoriesList);
-                categoryListView.setAdapter(adapter);
-            }
-        }else{
-            Toast.makeText(getActivity(), "No saved categories",Toast.LENGTH_LONG).show();
-        }
 
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -100,7 +91,21 @@ public class CategoryFilterFragment extends DialogFragment {
         return rootView;
     }
 
+    void updateListView() {
+        List<Categories> categories = Categories.listAll(Categories.class);
+        ArrayList<String> categoriesList = new ArrayList<>();
 
+        if (!categories.isEmpty()) {
+            for (int i = 0; i < categories.size(); i++) {
+                categoriesList.add(categories.get(i).getGifCategory());
+
+                adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, categoriesList);
+                categoryListView.setAdapter(adapter);
+            }
+        } else {
+            Toast.makeText(getActivity(), "No saved categories", Toast.LENGTH_LONG).show();
+        }
+    }
 
     public interface OnFilterSelectedListener {
         public void onFilterSelected(String category);
