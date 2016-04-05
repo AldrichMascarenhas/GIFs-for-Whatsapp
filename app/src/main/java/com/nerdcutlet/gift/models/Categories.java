@@ -8,6 +8,7 @@ import java.util.List;
  * Created by Aldrich on 03-04-2016.
  */
 public class Categories extends SugarRecord {
+    //TODO: Remove duplicates
 
     String gifCategory;
 

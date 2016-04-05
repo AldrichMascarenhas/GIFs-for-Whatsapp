@@ -20,8 +20,8 @@ public class FavouriteGif extends SugarRecord {
     String mTag;
     /*
     searchData
-    trendingGifs
-    receivedGifs
+    trendingGif
+    receivedGif
     TODO: Add random
      */
 
