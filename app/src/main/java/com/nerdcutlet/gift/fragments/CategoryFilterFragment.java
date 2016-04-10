@@ -2,11 +2,13 @@ package com.nerdcutlet.gift.fragments;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -40,6 +42,8 @@ public class CategoryFilterFragment extends DialogFragment {
     OnFilterSelectedListener mCallback;
     String category;
 
+    boolean isSelected;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_category_filter, container, false);
@@ -57,9 +61,19 @@ public class CategoryFilterFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                mCallback.onFilterSelected(category);
+                if(!isSelected){
+                    //Snaxkbar nothing selecteed
+                    Toast.makeText(getActivity(), "Nothing selected", Toast.LENGTH_SHORT).show();
+                    dismiss();
 
-                dismiss();
+                }
+                else {
+                    mCallback.onFilterSelected(category);
+
+                    dismiss();
+                }
+
+
             }
         });
 
@@ -67,6 +81,17 @@ public class CategoryFilterFragment extends DialogFragment {
         button_category_Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager inputManager = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                try{
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                }catch (NullPointerException e){
+                    //
+                }
+
 
                 category = autoCompleteTextView.getText().toString();
                 Log.d(LOG_TAG, "category : " + category);
@@ -82,6 +107,7 @@ public class CategoryFilterFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                isSelected = categoryListView.isItemChecked(position);
                 category = categoryListView.getItemAtPosition(position).toString();
 
             }

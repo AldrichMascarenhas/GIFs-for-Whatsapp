@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "MainActivity";
 
-    int typeOfData = 0; //0 is GIF, 1 is Sticker , 2 is Trending GIFs.
+    String typeOfData = "gif";
 
     DisplayMetrics display;
     int height =0;
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.gif_selected_button)
     public void gifSelected() {
-        typeOfData = 0;
+        typeOfData = "gif";
         gifSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.selected));
         stickerSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.notselected));
     }
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.sticker_selected_button)
     public void stickerSelected() {
-        typeOfData = 1;
+        typeOfData = "sticker";
         gifSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.notselected));
         stickerSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.selected));
     }
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.trending_button)
     void trendingButtonClick(){
-        typeOfData = 2;
+        typeOfData = "trendingGif";
         sendMessage("trendingGif", typeOfData);
     }
 
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void sendMessage(String searchParams, int typeOfData) {
+    public void sendMessage(String searchParams, String typeOfData) {
 
         Intent i = new Intent(getApplicationContext(), GifDisplayActivity.class);
         i.putExtra("search_param", searchParams);

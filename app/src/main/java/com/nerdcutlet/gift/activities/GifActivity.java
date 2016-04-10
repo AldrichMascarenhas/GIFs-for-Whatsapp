@@ -24,7 +24,6 @@ import android.widget.VideoView;
 import com.airbnb.deeplinkdispatch.DeepLink;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.fragments.CategoryFilterFragment;
-import com.nerdcutlet.gift.fragments.FavouriteFilterFragment;
 import com.nerdcutlet.gift.fragments.FilterFragment;
 import com.nerdcutlet.gift.models.FavouriteGif;
 import com.nerdcutlet.gift.other.VideoAsyncTask;
@@ -47,7 +46,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
     String gifRating, gifImportDatetime, gifTrendingDatetime, gifMp4, gifWebp, gifStillUrl;
     String gifMp4Size, gifWebpSize, gifWidth, gifHeight, gifId;
-    int typeOfData;
+    String typeOfData;
     String searchData;
 
 
@@ -127,10 +126,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         extras = i.getExtras();
         if (extras.containsKey("getId")) {
 
-
-            Log.d(LOG_TAG, "type of data : " + i.getIntExtra("typeOfData", 100)); //When FAv Gif is launched
             canBeSaved = true;
-
 
             gifRating = i.getStringExtra("getRating");
             gifImportDatetime = i.getStringExtra("getImportDatetime");
@@ -144,7 +140,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
             gifHeight = i.getStringExtra("getHeight");
             gifId = i.getStringExtra("getId");
 
-            typeOfData = i.getIntExtra("typeOfData", 0);
+            typeOfData = i.getStringExtra("typeOfData");
             searchData = i.getStringExtra("searchData");
 
 
@@ -242,12 +238,18 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
 
         } else if (gfycatType1 != null) {
+            canBeSaved = false;
+
             builtURL = "https://zippy.gfycat.com/" + gfycatType1 + ".mp4";
 
         } else if (gfycatType2 != null) {
+            canBeSaved = false;
+
             builtURL = "https://zippy.gfycat.com/" + gfycatType2;
 
         } else if (gfycatType3 != null) {
+            canBeSaved = false;
+
             builtURL = "https://giant.gfycat.com/" + gfycatType3;
 
         }
@@ -263,15 +265,15 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         //TODO Make sure When saving the value isn't already in the database
         if (extras.containsKey("getId")) {
 
-            FavouriteGif favouriteGif = new FavouriteGif(gifId, typeOfData, searchData, currentDate, category);
+            FavouriteGif favouriteGif = new FavouriteGif(gifId, currentDate, category);
             favouriteGif.save();
         } else if (giphyType1 != null) {
             searchData = "receivedGif";
-            FavouriteGif favouriteGif = new FavouriteGif(giphyType1, typeOfData, searchData, currentDate, category);
+            FavouriteGif favouriteGif = new FavouriteGif(giphyType1, currentDate, category);
             favouriteGif.save();
         } else if (giphyType2 != null) {
             searchData = "receivedGif";
-            FavouriteGif favouriteGif = new FavouriteGif(giphyType2, typeOfData, searchData, currentDate,  category);
+            FavouriteGif favouriteGif = new FavouriteGif(giphyType2, currentDate, category);
             favouriteGif.save();
         }
         //TODO: Snackbar here
