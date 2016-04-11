@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -51,49 +53,23 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MainActivity";
 
     String typeOfData = "gif";
+    TabLayout tabLayout;
+    int tabPosition;
 
-    DisplayMetrics display;
-    int height =0;
-    int width =0;
 
     GiphyApiInterface interf = GiphyApi.createService(GiphyApiInterface.class);
     Call<RandomGIFModel> randomGif = interf.getRandomGif("", "g", BuildConfig.GIPHY_API_TOKEN);
-
-
-    @Bind(R.id.gif_selected_button)
-    Button gifSelectedButton;
-
-    @OnClick(R.id.gif_selected_button)
-    public void gifSelected() {
-        typeOfData = "gif";
-        gifSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.selected));
-        stickerSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.notselected));
-    }
-
-
-    @Bind(R.id.sticker_selected_button)
-    Button stickerSelectedButton;
-
-    @OnClick(R.id.sticker_selected_button)
-    public void stickerSelected() {
-        typeOfData = "sticker";
-        gifSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.notselected));
-        stickerSelectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.selected));
-    }
 
 
     @Bind(R.id.search_edittext_field)
     EditText searchEditText;
 
 
-    @Bind(R.id.background_view)
-    LinearLayout background_view;
-
     @Bind(R.id.fav_button)
     Button fav_button;
 
     @OnClick(R.id.fav_button)
-    public void launchFavActivity(){
+    public void launchFavActivity() {
         Intent i = new Intent(this, FavActivity.class);
         startActivity(i);
     }
@@ -102,13 +78,13 @@ public class MainActivity extends AppCompatActivity {
     Button trending_button;
 
     @OnClick(R.id.trending_button)
-    void trendingButtonClick(){
+    void trendingButtonClick() {
         typeOfData = "trendingGif";
         sendMessage("trendingGif", typeOfData);
     }
 
     @OnClick(R.id.random_gif_button)
-    void newRandomGif(){
+    void newRandomGif() {
         FetchData(randomGif);
     }
 
@@ -123,17 +99,21 @@ public class MainActivity extends AppCompatActivity {
 
         FetchData(randomGif);
 
+        tabLayout = (TabLayout) findViewById(R.id.tablayout_options_main_activity);
+        tabLayout.addTab(tabLayout.newTab().setText("gif"));
+        tabLayout.addTab(tabLayout.newTab().setText("sticker"));
 
-        setViewHeight(this);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    if(tabPosition == 0){
+                        typeOfData = "gifs";
+                    }else {
+                        typeOfData = "stickers";
+                    }
                     sendMessage(searchEditText.getText().toString(), typeOfData);
                     handled = true;
                 }
@@ -141,6 +121,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                 tabPosition = tab.getPosition();
+                Log.d(LOG_TAG, "Tab : " + tabPosition);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
     }
 
@@ -153,14 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setViewHeight(Context context){
-        display = context.getResources().getDisplayMetrics();
-        width = display.widthPixels;
-        height = display.heightPixels;
-        height = height * 7 / 10;
-        background_view.setLayoutParams(new FrameLayout.LayoutParams(width, height));
 
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -183,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void FetchData(Call<RandomGIFModel> call) {
         //Since a Call instance can only be used once. Use clone to use it over again.
 
