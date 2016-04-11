@@ -4,21 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="100sp">
+    android:paddingTop="60dp">
 
-   <include layout="@layout/card_random"/>
+    <include layout="@layout/card_random" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
 
     <Button
         android:id="@+id/trending_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Trending"/>
+        android:background="@android:color/white"
+        android:text="@string/main_activity_trending_text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
 
     <Button
         android:id="@+id/fav_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Favourited"/>
+        android:background="@android:color/white"
+        android:text="@string/main_activity_favourite_text" />
 
 </LinearLayout>

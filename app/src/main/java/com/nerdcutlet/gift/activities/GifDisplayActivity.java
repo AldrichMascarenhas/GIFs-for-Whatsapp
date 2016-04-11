@@ -50,7 +50,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
     AsyncHttpTask task = new AsyncHttpTask();
 
     String searchData;
-    int typeOfData;
+    String typeOfData;
     String rating = "g";
     int limit = 50;
 
@@ -69,7 +69,8 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
         Intent intent = getIntent();
         if (null != intent) { //Null Checking
             searchData = intent.getStringExtra("search_param");
-            typeOfData = intent.getIntExtra("typeOfData", 0);
+            typeOfData = intent.getStringExtra("typeOfData");
+            Log.d(LOG_TAG, "searchData : " + searchData + " " + "typeOfData : " + typeOfData);
         }
 
 

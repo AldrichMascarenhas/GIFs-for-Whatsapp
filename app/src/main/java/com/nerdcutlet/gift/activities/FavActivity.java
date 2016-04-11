@@ -1,5 +1,6 @@
 package com.nerdcutlet.gift.activities;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,12 +10,16 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nerdcutlet.gift.BuildConfig;
 import com.nerdcutlet.gift.R;
+import com.nerdcutlet.gift.fragments.FilterFragment;
 import com.nerdcutlet.gift.models.FavouriteGif;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.models.giphy.GIFModelMain;
@@ -47,11 +52,15 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
     int typeOfData = 3;
     List<Datum> datums;
 
+    int favGifType;
+    String favCategory;
 
     @Override
     public void processFinish(List<Datum> p) {
+
         datums = p;
         adapter.setmGIFDataList(p);
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -63,7 +72,7 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gif_display);
+        setContentView(R.layout.activity_gif_fav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -90,16 +99,16 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
                 Intent gifIntent = new Intent(getApplicationContext(), GifActivity.class);
 
                 gifIntent.putExtra("getId", selectedDatum.getId());
-                gifIntent.putExtra("getRating",selectedDatum.getRating());
-                gifIntent.putExtra("getImportDatetime",selectedDatum.getImportDatetime());
-                gifIntent.putExtra("getTrendingDatetime",selectedDatum.getTrendingDatetime());
+                gifIntent.putExtra("getRating", selectedDatum.getRating());
+                gifIntent.putExtra("getImportDatetime", selectedDatum.getImportDatetime());
+                gifIntent.putExtra("getTrendingDatetime", selectedDatum.getTrendingDatetime());
 
                 gifIntent.putExtra("getMp4", selectedDatum.getImages().getFixedHeight().getMp4());
                 gifIntent.putExtra("getMp4Size", selectedDatum.getImages().getFixedHeight().getMp4Size());
-                gifIntent.putExtra("getWebp",selectedDatum.getImages().getFixedHeight().getWebp() );
-                gifIntent.putExtra("getWebpSize",selectedDatum.getImages().getFixedHeight().getWebpSize() );
+                gifIntent.putExtra("getWebp", selectedDatum.getImages().getFixedHeight().getWebp());
+                gifIntent.putExtra("getWebpSize", selectedDatum.getImages().getFixedHeight().getWebpSize());
 
-                gifIntent.putExtra("getStillUrl",selectedDatum.getImages().getFixedHeightStill().getUrl());
+                gifIntent.putExtra("getStillUrl", selectedDatum.getImages().getFixedHeightStill().getUrl());
                 gifIntent.putExtra("getWidth", selectedDatum.getImages().getFixedHeight().getWidth());
                 gifIntent.putExtra("getHeight", selectedDatum.getImages().getFixedHeight().getHeight());
 
@@ -110,29 +119,33 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
 
         mRecyclerView.setAdapter(adapter);
 
-        task.setData(getGifIdsFromDatabase(), typeOfData);
+        task.setData(getGifIdsFromDatabase(), "favGifs"); //By default show all saved, //Fav API call
         task.asyncTaskResponse = this;
         task.execute();
 
 
     }
 
-    String getGifIdsFromDatabase(){
-        List<FavouriteGif> books = FavouriteGif.listAll(FavouriteGif.class);
+    String getGifIdsFromDatabase() {
+
+        List<FavouriteGif> books = new ArrayList<>();
+        books = FavouriteGif.listAll(FavouriteGif.class);
+
         ArrayList<String> ids = new ArrayList<>();
 
-        if(!books.isEmpty()){
-            for(int i =0; i< books.size(); i++){
+        if (!books.isEmpty()) {
+            for (int i = 0; i < books.size(); i++) {
                 ids.add(books.get(i).getmGifID());
             }
-        }else{
-            Toast.makeText(getApplicationContext(), "No fav gifs",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "No fav gifs", Toast.LENGTH_LONG).show();
         }
 
 
         Log.d(LOG_TAG, "Array List Size  : " + ids.size());
+
         String listString = "";
-        for(int i = 0; i<ids.size(); i++){
+        for (int i = 0; i < ids.size(); i++) {
             listString = listString + "," + ids.get(i);
         }
         listString = listString.replaceFirst(",", "");
@@ -140,5 +153,6 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
 
         return listString;
     }
+
 
 }

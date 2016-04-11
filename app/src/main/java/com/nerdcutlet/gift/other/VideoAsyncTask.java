@@ -111,7 +111,9 @@ public class VideoAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+
         progressBar.setVisibility(View.INVISIBLE);
+        Log.d(LOG_TAG, "local video url : " + myExternalFile.getAbsolutePath());
         videoDownloadResponse.localVideoUrl(myExternalFile.getAbsolutePath());
 
     }

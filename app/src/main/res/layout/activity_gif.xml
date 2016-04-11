@@ -1,114 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:background="#AA000000">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+
+    <ImageView
+        android:id="@+id/gif_image"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/untitled" />
+
+
+    <VideoView
+        android:id="@+id/videoView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true">
+        android:layout_centerInParent="true" />
 
 
-        <View
-            android:id="@+id/gif_blank_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_scrollFlags="scroll" />
-
-        <RelativeLayout
-            android:id="@+id/relative_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-
-            <ImageView
-                android:id="@+id/gif_image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/untitled"
-                app:layout_collapseMode="pin" />
-
-            <VideoView
-                android:visibility="gone"
-                android:id="@+id/videoView1"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"/>
-
-            <ProgressBar
-                android:id="@+id/gif_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="invisible" />
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_gif"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/colorPrimary"
-            android:orientation="horizontal" />
-
-
-    </android.support.design.widget.AppBarLayout>
-
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/gif_scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill_vertical"
-        android:background="@color/back_color"
-        android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="24dp">
-
-                <Button
-                    android:id="@+id/test_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/save_gif_offline" />
-
-                <Button
-                    android:id="@+id/fav_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/fav_gif" />
-
-            </LinearLayout>
-
-            <include layout="@layout/gif_details" />
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
+    <ProgressBar
+        android:id="@+id/gif_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_action_action_search"
-        app:layout_anchor="@id/linear_gif"
-        app:layout_anchorGravity="top|right|end" />
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
+
+</RelativeLayout>

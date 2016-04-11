@@ -28,12 +28,12 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
     private final static String LOG_TAG = "AsyncHttpTask";
     String searchParameter;
-    int typeOfData;
+    String typeOfData;
     String rating;
     int limit;
 
 
-    public void setData(String search, int typeOfData, String rating, int limit) {
+    public void setData(String search, String typeOfData, String rating, int limit) {
         try {
             this.searchParameter = URLEncoder.encode(search, "UTF-8");
 
@@ -47,7 +47,7 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
     }
 
-    public void setData(String search, int typeOfData) {
+    public void setData(String search, String typeOfData) {
 
         this.searchParameter = search;
         this.typeOfData = typeOfData;
@@ -66,19 +66,20 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
         Call<GIFModelMain> stickerCall;
         Call<GIFModelMain> trendingCall;
         Call<GIFModelMain> gifsByIdCall;
-        if (typeOfData == 0) {
+        Log.d(LOG_TAG, "typeOfData : " + typeOfData);
+        if (typeOfData.equals("gif")) {
             gifCall = interf.searchGifs(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(gifCall);
 
-        } else if (typeOfData == 1) {
+        } else if (typeOfData.equals("sticker")) {
             stickerCall = interf.searchStickers(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(stickerCall);
 
-        } else if (typeOfData == 2) {
+        } else if (typeOfData.equals("trendingGif")) {
             trendingCall = interf.getTrendingGifs(rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(trendingCall);
 
-        } else if (typeOfData == 3) {
+        } else if (typeOfData.equals("favGifs")) {
             gifsByIdCall = interf.getGifsByID(searchParameter, BuildConfig.GIPHY_API_TOKEN);
             FetchData(gifsByIdCall);
         }
@@ -103,17 +104,16 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
 
                 if (response.isSuccess()) {
                     // request successful (status code 200, 201)
+
+
                     GIFModelMain result
                             = response.body();
 
-                    asyncTaskResponse.processFinish(result.getData());
-
-                    /*
-                    Uncomment to Log Respone + API Call
+                    //Uncomment to Log Respone + API Call
                     Log.d(LOG_TAG, "API Call = " + call.request().url().toString());
                     Log.d(LOG_TAG, "response = " + new Gson().toJson(result));
-                     */
 
+                    asyncTaskResponse.processFinish(result.getData());
 
 
                 } else {

@@ -24,13 +24,18 @@
     <string name="limit_4">75</string>
 
     <!--Cards-->
-    <string name="random_gifs_text">Random</string>
+    <string name="random_gifs_text">Random Gif</string>
 
     <string name="save_gif_offline">Save</string>
     <string name="fav_gif">Favourite</string>
 
     <string name="storage_filepath">GifStorage</string>
     <string name="title_activity_fav">FavActivity</string>
+
+    <string name="search_box_text">Laughing, Smiling</string>
+    <string name="main_activity_top_text">Find the perfect Gif to express yourself</string>
+    <string name="main_activity_trending_text">Trending Gifs</string>
+    <string name="main_activity_favourite_text">Favourited Gifs</string>
 
 
 </resources>
