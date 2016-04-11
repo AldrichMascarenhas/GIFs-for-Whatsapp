@@ -29,6 +29,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.nerdcutlet.gift.App;
 import com.nerdcutlet.gift.BuildConfig;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.models.giphy.Datum;
@@ -49,6 +50,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
 
     private static final String LOG_TAG = "MainActivity";
 
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
         FetchData(randomGif);
 
         tabLayout = (TabLayout) findViewById(R.id.tablayout_options_main_activity);
@@ -110,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     if(tabPosition == 0){
-                        typeOfData = "gifs";
+                        typeOfData = "gif";
                     }else {
-                        typeOfData = "stickers";
+                        typeOfData = "sticker";
                     }
                     sendMessage(searchEditText.getText().toString(), typeOfData);
                     handled = true;

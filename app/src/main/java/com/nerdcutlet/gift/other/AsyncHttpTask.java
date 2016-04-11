@@ -66,6 +66,7 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
         Call<GIFModelMain> stickerCall;
         Call<GIFModelMain> trendingCall;
         Call<GIFModelMain> gifsByIdCall;
+        Log.d(LOG_TAG, "typeOfData : " + typeOfData);
         if (typeOfData.equals("gif")) {
             gifCall = interf.searchGifs(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
             FetchData(gifCall);

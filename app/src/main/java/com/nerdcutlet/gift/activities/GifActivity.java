@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -38,12 +39,8 @@ import java.util.Calendar;
 public class GifActivity extends Activity implements VideoDownloadResponse, CategoryFilterFragment.OnFilterSelectedListener {
 
     public final static String LOG_TAG = "GifActivity";
+
     Utils utils = new Utils();
-    DisplayMetrics display;
-    int mwidth, mheight;
-
-
-
     String gifRating, gifImportDatetime, gifTrendingDatetime, gifMp4, gifWebp, gifStillUrl;
     String gifMp4Size, gifWebpSize, gifWidth, gifHeight, gifId;
     String typeOfData;
@@ -73,29 +70,12 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         setContentView(R.layout.activity_gif);
 
 
-        FloatingActionButton fab_activity_gif_share = (FloatingActionButton)findViewById(R.id.fab_activity_gif_share);
-        fab_activity_gif_share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String url = "https://giphy.com/gifs/" + gifId;
-
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("text", url);
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(getApplicationContext(), "Copied to clipboard!", Toast.LENGTH_LONG).show();
-
-
-            }
-        });
         gifImage = (ImageView) findViewById(R.id.gif_image);
         videoView = (VideoView) findViewById(R.id.videoView1);
 
-        progressBar = (ProgressBar) findViewById(R.id.gif_progress);
-        View gifblankview = (View) findViewById(R.id.gif_blank_view);
-        NestedScrollView gifscrollview = (NestedScrollView) findViewById(R.id.gif_scrollview);
+        videoView.setVisibility(View.GONE);
 
+        progressBar = (ProgressBar) findViewById(R.id.gif_progress);
 
         //DeepLink Stuff
         if (getIntent().getBooleanExtra(DeepLink.IS_DEEP_LINK, false)) {
@@ -143,6 +123,9 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
             typeOfData = i.getStringExtra("typeOfData");
             searchData = i.getStringExtra("searchData");
 
+            Log.d(LOG_TAG, "px to dp : " + utils.convertPixelsToDp(200, getApplicationContext() ));
+
+
 
             Picasso.with(getApplicationContext())
                     .load(gifStillUrl)
@@ -153,27 +136,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         }
 
 
-        display = getApplicationContext().getResources().getDisplayMetrics();
-        mwidth = display.widthPixels;
-        mheight = display.heightPixels;
-        Log.d(LOG_TAG, "w : " + mwidth + " h : " + mheight);
-
-
-        ViewGroup.LayoutParams params2 = gifblankview.getLayoutParams();
-        int xhgth2 = Math.round(mheight / 3 - 50);
-        Log.d(LOG_TAG, "blank view : " + xhgth2);
-        params2.height = (xhgth2);
-        gifblankview.requestLayout();
-
-
-        ViewGroup.LayoutParams params3 = gifscrollview.getLayoutParams();
-        int xhgth = Math.round(mheight * 2 / 3 - 200);
-        Log.d(LOG_TAG, "scroll view : " + xhgth);
-
-        params3.height = xhgth;
-        gifscrollview.requestLayout();
-
-
+        /*
         Button testb = (Button) findViewById(R.id.test_btn);
         testb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +174,8 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
             }
         });
+        */
+
     }
 
     void buildGifUrl(String giphyType1, String giphyType2, String gfycatType1, String gfycatType2, String gfycatType3) {
@@ -291,6 +256,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
     public void localVideoUrl(String videoUrl) {
         localurl = videoUrl;
         Log.d(LOG_TAG, localurl);
+
         gifImage.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
 

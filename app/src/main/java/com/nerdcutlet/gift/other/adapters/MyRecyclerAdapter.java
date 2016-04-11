@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
+import com.nerdcutlet.gift.App;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.views.OnItemClickListener;
@@ -39,6 +40,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
     OnItemClickListener listener;
 
+    App app;
 
     public MyRecyclerAdapter(Context context, OnItemClickListener listener) {
 
@@ -54,6 +56,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mGIFDataList = new ArrayList<>();
+        app = (App) context.getApplicationContext();
+
     }
 
     @Override
@@ -77,10 +81,16 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         Datum data = mGIFDataList.get(position);
 
+        Log.d(LOG_TAG, "Connection is : " + app.getmConnectionClass().toString());
 
+        if(app.getmConnectionClass().toString().equals("POOR")){
+            Ion.with(holder.gifImageView)
+                    .load(data.getImages().getFixedHeightSmallStill().getUrl());
+        }else{
+            Ion.with(holder.gifImageView)
+                    .load(data.getImages().getFixedHeightSmall().getUrl());
+        }
 
-        Ion.with(holder.gifImageView)
-                .load(data.getImages().getFixedHeightSmall().getUrl());
 
 
         holder.mGIFTypeTextView.setText(data.getId());
@@ -100,7 +110,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     }
 }
 
-class CustomViewHolder extends RecyclerView.ViewHolder{
+class CustomViewHolder extends RecyclerView.ViewHolder {
     protected TextView mGifNameTextView;
     protected TextView mGIFTypeTextView;
     protected GifImageView gifImageView;

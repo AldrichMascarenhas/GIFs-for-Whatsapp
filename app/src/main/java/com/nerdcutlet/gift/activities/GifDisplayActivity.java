@@ -70,6 +70,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
         if (null != intent) { //Null Checking
             searchData = intent.getStringExtra("search_param");
             typeOfData = intent.getStringExtra("typeOfData");
+            Log.d(LOG_TAG, "searchData : " + searchData + " " + "typeOfData : " + typeOfData);
         }
 
 
