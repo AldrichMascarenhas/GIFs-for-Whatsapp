@@ -84,6 +84,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
         Log.d(LOG_TAG, "Connection is : " + app.getmConnectionClass().toString());
 
         if(app.getmConnectionClass().toString().equals("POOR") ||app.getmConnectionClass().toString().equals("MODERATE") || app.getmConnectionClass().toString().equals("UNKNOWN")){
+
             Ion.with(holder.gifImageView)
                     .load(data.getImages().getFixedHeightSmallStill().getUrl());
         }else{
