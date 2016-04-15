@@ -24,13 +24,13 @@ import java.net.URLConnection;
  */
 public class App extends Application {
 
-    public final static String LOG_TAG = "App";
+    public final static String LOG_TAG = "Connection Class";
 
     private ConnectionClassManager mConnectionClassManager;
     private DeviceBandwidthSampler mDeviceBandwidthSampler;
     private ConnectionChangedListener mListener;
 
-    private String mURL = "https://github.com/AldrichMascarenhas/GIFs-for-Whatsapp/raw/5b3fe6bec63adaaea04cf80983844b1004f3e669/NetworkConnection/test_img.jpg";
+    private String mURL = "https://raw.githubusercontent.com/AldrichMascarenhas/GIFs-for-Whatsapp/fe31ebf538e0affdec5723da54050f527d1d9389/NetworkConnection/test_img.jpg";
     private int mTries = 0;
     public ConnectionQuality mConnectionClass = ConnectionQuality.UNKNOWN;
 
@@ -49,7 +49,8 @@ public class App extends Application {
         mListener = new ConnectionChangedListener();
         mConnectionClassManager.register(mListener);
 
-        startCheck();
+        //TODO: Reduce image size.
+        //startCheck();
 
     }
 
@@ -96,7 +97,10 @@ public class App extends Application {
         @Override
         protected void onPreExecute() {
             mDeviceBandwidthSampler.startSampling();
+            Log.d(LOG_TAG, "Profiling Started");
+
         }
+
 
         @Override
         protected Void doInBackground(String... url) {
@@ -125,6 +129,7 @@ public class App extends Application {
         @Override
         protected void onPostExecute(Void v) {
             mDeviceBandwidthSampler.stopSampling();
+            Log.d(LOG_TAG, "Profiling Ended");
 
             // Retry for up to 10 times until we find a ConnectionClass.
             if (mConnectionClass == ConnectionQuality.UNKNOWN && mTries < 5) {
