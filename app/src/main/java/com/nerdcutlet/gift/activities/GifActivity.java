@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.os.Bundle;
+import android.support.v4.widget.TextViewCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -33,6 +35,10 @@ import com.nerdcutlet.gift.utils.VideoDownloadResponse;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 @DeepLink({"https://giphy.com/gifs/{giphyType1}", "https://giphy.com/gifs/{giphyType2}/html5",
         "https://gfycat.com/{gfycatType1}", "https://zippy.gfycat.com/{gfycatType2}", "https://giant.gfycat.com/{gfycatType3}"})
@@ -64,10 +70,66 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
     String giphyType1, giphyType2, gfycatType1, gfycatType2, gfycatType3;
 
+    @Bind(R.id.textview_gif_title)
+    TextView textViewGifTitle;
+
+    @Bind(R.id.button_gif_favourite)
+    Button buttonGifFavourite;
+
+    @OnClick(R.id.button_gif_favourite)
+    public void addToFavourite() {
+
+        calendar = Calendar.getInstance();
+        currentDate = utils.getDateTime(calendar);
+
+        //String mGifID, int mTypeOfData, String mTag, String mDate
+        if (canBeSaved) {
+
+            FragmentManager fm = getFragmentManager();
+            CategoryFilterFragment dialogFragment = new CategoryFilterFragment();
+            dialogFragment.show(fm, "Fragment");
+
+            //Handle Setting in OnFilterSelected
+
+        } else {
+            Toast.makeText(getApplicationContext(), "Cannot be saved", Toast.LENGTH_LONG).show();
+
+        }
+
+    }
+
+
+    @Bind(R.id.button_gif_savetogallery)
+    Button buttonSaveToGallery;
+
+    @OnClick(R.id.button_gif_savetogallery)
+    public void saveToGallery() {
+        Toast.makeText(getApplicationContext(), "This will Save Video Offline", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Bind(R.id.fab_gif_share)
+    FloatingActionButton fabGifShare;
+
+    @OnClick(R.id.fab_gif_share)
+    public void shareGif() {
+        String url = "https://giphy.com/gifs/" + gifId;
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_gif_text)));
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gif);
+
+        ButterKnife.bind(this);
 
 
         gifImage = (ImageView) findViewById(R.id.gif_image);
@@ -123,8 +185,18 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
             typeOfData = i.getStringExtra("typeOfData");
             searchData = i.getStringExtra("searchData");
 
-            Log.d(LOG_TAG, "px to dp : " + utils.convertPixelsToDp(200, getApplicationContext() ));
+            Log.d(LOG_TAG, "px to dp : " + utils.convertPixelsToDp(200, getApplicationContext()));
 
+            if (typeOfData.equals("gif")) {
+                textViewGifTitle.setText("Gif");
+
+            } else if (typeOfData.equals("sticker")) {
+                textViewGifTitle.setText("Sticker");
+
+            } else if (typeOfData.equals("trendingGif")) {
+                textViewGifTitle.setText("Trending Gif");
+
+            }
 
 
             Picasso.with(getApplicationContext())
@@ -136,46 +208,6 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         }
 
 
-        /*
-        Button testb = (Button) findViewById(R.id.test_btn);
-        testb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(getApplicationContext(), "This will Save Video Offline", Toast.LENGTH_LONG).show();
-
-
-            }
-        });
-
-
-        Button fav_btn = (Button) findViewById(R.id.fav_btn);
-        fav_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                calendar = Calendar.getInstance();
-                currentDate = utils.getDateTime(calendar);
-
-                //String mGifID, int mTypeOfData, String mTag, String mDate
-                if (canBeSaved) {
-
-                    FragmentManager fm = getFragmentManager();
-                    CategoryFilterFragment dialogFragment = new CategoryFilterFragment();
-                    dialogFragment.show(fm, "Fragment");
-
-                    //Handle Setting in OnFilterSelected
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Cannot be saved", Toast.LENGTH_LONG).show();
-
-                }
-
-
-            }
-        });
-        */
-
     }
 
     void buildGifUrl(String giphyType1, String giphyType2, String gfycatType1, String gfycatType2, String gfycatType3) {
@@ -183,6 +215,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
         if (giphyType1 != null) {
             canBeSaved = true;
+            textViewGifTitle.setText("Giphy Gif");
             builtURL = "https://media2.giphy.com/media/" + giphyType1 + "/200.mp4";
 
 
@@ -193,6 +226,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
         } else if (giphyType2 != null) {
             canBeSaved = true;
+            textViewGifTitle.setText("Giphy Gif");
             builtURL = "https://media2.giphy.com/media/" + giphyType2 + "/200.mp4";
 
 
@@ -204,16 +238,19 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
         } else if (gfycatType1 != null) {
             canBeSaved = false;
+            textViewGifTitle.setText("Gfycat Gif");
 
             builtURL = "https://zippy.gfycat.com/" + gfycatType1 + ".mp4";
 
         } else if (gfycatType2 != null) {
             canBeSaved = false;
+            textViewGifTitle.setText("Gfycat Gif");
 
             builtURL = "https://zippy.gfycat.com/" + gfycatType2;
 
         } else if (gfycatType3 != null) {
             canBeSaved = false;
+            textViewGifTitle.setText("Gfycat Gif");
 
             builtURL = "https://giant.gfycat.com/" + gfycatType3;
 

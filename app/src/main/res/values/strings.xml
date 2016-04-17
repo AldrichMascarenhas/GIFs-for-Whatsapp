@@ -4,6 +4,7 @@
     <string name="title_activity_gif_display">GifDisplayActivity</string>
 
 
+    <string name="share_gif_text">Share Gif to...</string>
 
 
     <string name="filter_apply">Apply</string>
@@ -37,5 +38,8 @@
     <string name="main_activity_trending_text">Trending Gifs</string>
     <string name="main_activity_favourite_text">Favourited Gifs</string>
 
+
+    <string name="gif_favourite">Favourite</string>
+    <string name="gif_savetogallery">Save</string>
 
 </resources>
