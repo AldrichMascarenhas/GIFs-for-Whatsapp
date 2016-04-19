@@ -1,6 +1,9 @@
 package com.nerdcutlet.gift.other.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -10,13 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.florent37.picassopalette.PicassoPalette;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.ImageViewBitmapInfo;
 import com.koushikdutta.ion.Ion;
 import com.nerdcutlet.gift.App;
 import com.nerdcutlet.gift.R;
 import com.nerdcutlet.gift.models.giphy.Datum;
+import com.nerdcutlet.gift.other.PaletteTransformation;
 import com.nerdcutlet.gift.views.OnItemClickListener;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -70,7 +79,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(v, viewHolder.getAdapterPosition());
+                listener.onItemClick(v, viewHolder.getAdapterPosition(), viewHolder.relativeLayout.getBackground());
             }
         });
 
@@ -78,24 +87,56 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        Datum data = mGIFDataList.get(position);
+    public void onBindViewHolder(final CustomViewHolder holder, final int position) {
+        final Datum data = mGIFDataList.get(position);
 
-        Log.d(LOG_TAG, "Connection is : " + app.getmConnectionClass().toString());
+        //Log.d(LOG_TAG, "Connection is : " + app.getmConnectionClass().toString());
 
         /*
         if(app.getmConnectionClass().toString().equals("POOR") ||app.getmConnectionClass().toString().equals("MODERATE") || app.getmConnectionClass().toString().equals("UNKNOWN")){
 
             Ion.with(holder.gifImageView)
-                    .load(data.getImages().getFixedHeightSmallStill().getUrl());
+                    .load();
         }else{
             Ion.with(holder.gifImageView)
                     .load(data.getImages().getFixedHeightSmall().getUrl());
         }*/
 
-        Ion.with(holder.gifImageView)
-                .load(data.getImages().getFixedHeightSmallStill().getUrl());
 
+        //cancel any loading images on this view
+        Picasso.with(mContext).cancelRequest(holder.gifImageView);
+        //load the image
+        Picasso.with(mContext).load(data.getImages().getFixedHeightSmallStill().getUrl()).transform(PaletteTransformation.instance()).into(holder.gifImageView, new Callback.EmptyCallback() {
+            @Override
+            public void onSuccess() {
+                Bitmap bitmap = ((BitmapDrawable) holder.gifImageView.getDrawable()).getBitmap(); // Ew!
+
+                if (bitmap != null && !bitmap.isRecycled()) {
+                    Palette palette = PaletteTransformation.getPalette(bitmap);
+
+                    if (palette != null) {
+                        Palette.Swatch s = palette.getVibrantSwatch();
+                        if (s == null) {
+                            s = palette.getDarkVibrantSwatch();
+                        }
+                        if (s == null) {
+                            s = palette.getLightVibrantSwatch();
+                        }
+                        if (s == null) {
+                            s = palette.getMutedSwatch();
+                        }
+                        if (s != null) {
+                            Log.d(LOG_TAG, "position : " + position +  " Pop : " + s.getPopulation() + " Swatch : " + s.getRgb() + "Title text color : " + s.getTitleTextColor());
+                            holder.relativeLayout.setBackgroundColor(s.getRgb());
+
+                            holder.mGifNameTextView.setTextColor(s.getTitleTextColor());
+                            holder.mGIFTypeTextView.setTextColor(s.getTitleTextColor());
+                        }
+                    }
+                }
+
+            }
+        });
 
         holder.mGIFTypeTextView.setText(data.getId());
         holder.mGifNameTextView.setText(data.getRating());
@@ -118,14 +159,16 @@ class CustomViewHolder extends RecyclerView.ViewHolder {
     protected TextView mGifNameTextView;
     protected TextView mGIFTypeTextView;
     protected GifImageView gifImageView;
+    protected RelativeLayout relativeLayout;
 
     public CustomViewHolder(View view) {
         super(view);
 
 
-        this.gifImageView = (GifImageView) view.findViewById(R.id.gifImageView);
-        this.mGifNameTextView = (TextView) view.findViewById(R.id.gif_name);
-        this.mGIFTypeTextView = (TextView) view.findViewById(R.id.gif_type);
+        this.gifImageView = (GifImageView) view.findViewById(R.id.gifimageview_recyclerviewitem);
+        this.mGifNameTextView = (TextView) view.findViewById(R.id.textview1_recyclerviewitem);
+        this.mGIFTypeTextView = (TextView) view.findViewById(R.id.textview2_recyclerviewitem);
+        this.relativeLayout = (RelativeLayout) view.findViewById(R.id.relative_container_recyclerviewitem);
 
 
     }
