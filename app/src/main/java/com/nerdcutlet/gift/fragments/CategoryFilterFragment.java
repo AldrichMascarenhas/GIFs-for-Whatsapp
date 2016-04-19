@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,11 +43,11 @@ public class CategoryFilterFragment extends DialogFragment {
     OnFilterSelectedListener mCallback;
     String category;
 
-    boolean isSelected;
+    boolean isSelected = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_category_filter, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_category_filter, container, false);
         ButterKnife.bind(this, rootView);
 
         categoryListView = (ListView) rootView.findViewById(R.id.category_listview);
@@ -96,6 +97,9 @@ public class CategoryFilterFragment extends DialogFragment {
                 category = autoCompleteTextView.getText().toString();
                 Log.d(LOG_TAG, "category : " + category);
 
+                Snackbar.make(rootView, "Category : " + category + " added. Select from list", Snackbar.LENGTH_LONG).show();
+
+
                 Categories categories = new Categories(category);
                 categories.save();
 
@@ -125,7 +129,7 @@ public class CategoryFilterFragment extends DialogFragment {
             for (int i = 0; i < categories.size(); i++) {
                 categoriesList.add(categories.get(i).getGifCategory());
 
-                adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, categoriesList);
+                adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_view_category, categoriesList);
                 categoryListView.setAdapter(adapter);
             }
         } else {
