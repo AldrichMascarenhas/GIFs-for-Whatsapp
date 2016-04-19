@@ -37,6 +37,8 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.2.0'
     compile 'com.android.support:palette-v7:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'
+
+
     compile 'com.google.code.gson:gson:2.6.2'
 
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
@@ -53,5 +55,6 @@ dependencies {
     compile 'com.airbnb:deeplinkdispatch:1.5.0'
     apt 'com.airbnb:deeplinkdispatch-processor:1.5.0'
     compile 'com.facebook.network.connectionclass:connectionclass:1.0.1'
+    compile 'com.github.florent37:picassopalette:1.0.2@aar'
 
 }

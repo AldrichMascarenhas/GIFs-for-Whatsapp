@@ -2,6 +2,9 @@ package com.nerdcutlet.gift.activities;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -48,12 +51,9 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
     private MyRecyclerAdapter adapter;
 
 
-    String searchData;
-    int typeOfData = 3;
+    String typeOfData = "favGifs";
     List<Datum> datums;
 
-    int favGifType;
-    String favCategory;
 
     @Override
     public void processFinish(List<Datum> p) {
@@ -93,7 +93,7 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
 
         adapter = new MyRecyclerAdapter(this, new OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position) {
+            public void onItemClick(View v, int position, Drawable drawable) {
                 Datum selectedDatum = datums.get(position);
 
                 Intent gifIntent = new Intent(getApplicationContext(), GifActivity.class);
@@ -112,6 +112,16 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
                 gifIntent.putExtra("getWidth", selectedDatum.getImages().getFixedHeight().getWidth());
                 gifIntent.putExtra("getHeight", selectedDatum.getImages().getFixedHeight().getHeight());
 
+                gifIntent.putExtra("typeOfData", typeOfData);
+
+                int color = Color.TRANSPARENT;
+
+                if (drawable instanceof ColorDrawable)
+                    color = ((ColorDrawable) drawable).getColor();
+
+                gifIntent.putExtra("backgroundColor", color);
+
+
                 startActivity(gifIntent);
 
             }
@@ -119,7 +129,7 @@ public class FavActivity extends AppCompatActivity implements AsyncTaskResponse 
 
         mRecyclerView.setAdapter(adapter);
 
-        task.setData(getGifIdsFromDatabase(), "favGifs"); //By default show all saved, //Fav API call
+        task.setData(getGifIdsFromDatabase(), typeOfData);
         task.asyncTaskResponse = this;
         task.execute();
 

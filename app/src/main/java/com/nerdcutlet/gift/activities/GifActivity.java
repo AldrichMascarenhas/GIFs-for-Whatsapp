@@ -70,6 +70,12 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
     String giphyType1, giphyType2, gfycatType1, gfycatType2, gfycatType3;
 
+    //Colors
+    int color;
+
+    @Bind(R.id.linear_container_gif)
+    LinearLayout linearLayout;
+
     @Bind(R.id.textview_gif_title)
     TextView textViewGifTitle;
 
@@ -185,6 +191,8 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
             typeOfData = i.getStringExtra("typeOfData");
             searchData = i.getStringExtra("searchData");
 
+            color = i.getIntExtra("backgroundColor", 0xFFFF0000);
+
             Log.d(LOG_TAG, "px to dp : " + utils.convertPixelsToDp(200, getApplicationContext()));
 
             if (typeOfData.equals("gif")) {
@@ -196,9 +204,12 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
             } else if (typeOfData.equals("trendingGif")) {
                 textViewGifTitle.setText("Trending Gif");
 
+            }else if (typeOfData.equals("favGifs")) {
+                textViewGifTitle.setText("Favourite Gif");
+
             }
 
-
+            linearLayout.setBackgroundColor(color);
             Picasso.with(getApplicationContext())
                     .load(gifStillUrl)
                     .placeholder(R.color.colorAccent)

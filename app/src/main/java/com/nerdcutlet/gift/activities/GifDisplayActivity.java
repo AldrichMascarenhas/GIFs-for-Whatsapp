@@ -2,6 +2,9 @@ package com.nerdcutlet.gift.activities;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -82,8 +85,11 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
 
         adapter = new MyRecyclerAdapter(this, new OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position) {
+            public void onItemClick(View v, int position, Drawable drawable) {
                 Datum selectedDatum = datums.get(position);
+
+
+
 
                 Intent gifIntent = new Intent(getApplicationContext(), GifActivity.class);
 
@@ -103,6 +109,14 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
 
                 gifIntent.putExtra("typeOfData", typeOfData);
                 gifIntent.putExtra("searchData", searchData);
+
+                int color = Color.TRANSPARENT;
+
+                if (drawable instanceof ColorDrawable)
+                    color = ((ColorDrawable) drawable).getColor();
+
+                gifIntent.putExtra("backgroundColor", color);
+
                 startActivity(gifIntent);
             }
         });
