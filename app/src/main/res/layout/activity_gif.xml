@@ -15,13 +15,13 @@
 
 
         <RelativeLayout
-            android:id="@+id/relative_container_gif"
+            android:id="@+id/relative_container_gif_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
             <ImageView
-                android:id="@+id/gif_image"
+                android:id="@+id/gif_image_gif_activity"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_centerInParent="true"
@@ -30,14 +30,14 @@
 
 
             <VideoView
-                android:id="@+id/videoView1"
+                android:id="@+id/videoview_gif_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
 
             <ProgressBar
-                android:id="@+id/gif_progress"
+                android:id="@+id/progressbar_gif_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -48,15 +48,15 @@
 
 
         <LinearLayout
-            android:id="@+id/linear_container_gif"
+            android:id="@+id/linear_container_gif_activity"
             android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:layout_below="@id/relative_container_gif"
+            android:layout_below="@id/relative_container_gif_activity"
             android:background="@color/gif1"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textview_gif_title"
+                android:id="@+id/textview_gif_activity_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -71,14 +71,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linear_container_gif"
+            android:layout_below="@id/linear_container_gif_activity"
             android:background="@color/gif2"
             android:orientation="horizontal"
             android:paddingBottom="8dp"
             android:paddingTop="8dp">
 
             <Button
-                android:id="@+id/button_gif_favourite"
+                android:id="@+id/button_gif_activity_favouritegifs"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -90,7 +90,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button_gif_savetogallery"
+                android:id="@+id/button_gif_activity_savetogallery"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -104,10 +104,10 @@
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_gif_share"
+            android:id="@+id/fab__gif_activity_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/linear_container_gif"
+            android:layout_alignBottom="@id/linear_container_gif_activity"
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             android:clickable="true"

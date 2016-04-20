@@ -47,48 +47,50 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
     public final static String LOG_TAG = "GifActivity";
 
     Utils utils = new Utils();
+    VideoAsyncTask task = new VideoAsyncTask();
+
+    /*
+    Intent Parameters
+     */
+    Bundle extras;
     String gifRating, gifImportDatetime, gifTrendingDatetime, gifMp4, gifWebp, gifStillUrl;
     String gifMp4Size, gifWebpSize, gifWidth, gifHeight, gifId;
-    String typeOfData;
-    String searchData;
+    String typeOfData, searchData;
 
-
+    //Calendar
     Calendar calendar;
     String currentDate;
 
-    String localurl;
+    //Downloaded Video URL
+    String videoLocalURL;
 
-    ImageView gifImage;
-    VideoView videoView;
-    ProgressBar progressBar;
-
+    //If Gif can be saved to Favourites.
     boolean canBeSaved = false;
-    Bundle extras;
-    VideoAsyncTask task = new VideoAsyncTask();
 
-    String category;
+    //CAtegory returned from Category Filter Fragment
+    String gifCategory;
 
+    //DeepLink Parameters
     String giphyType1, giphyType2, gfycatType1, gfycatType2, gfycatType3;
 
     //Colors
     int color;
 
-    @Bind(R.id.linear_container_gif)
+    @Bind(R.id.linear_container_gif_activity)
     LinearLayout linearLayout;
 
-    @Bind(R.id.textview_gif_title)
+    @Bind(R.id.textview_gif_activity_title)
     TextView textViewGifTitle;
 
-    @Bind(R.id.button_gif_favourite)
+    @Bind(R.id.button_gif_activity_favouritegifs)
     Button buttonGifFavourite;
 
-    @OnClick(R.id.button_gif_favourite)
+    @OnClick(R.id.button_gif_activity_favouritegifs)
     public void addToFavourite() {
 
         calendar = Calendar.getInstance();
         currentDate = utils.getDateTime(calendar);
 
-        //String mGifID, int mTypeOfData, String mTag, String mDate
         if (canBeSaved) {
 
             FragmentManager fm = getFragmentManager();
@@ -99,25 +101,22 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
         } else {
             Toast.makeText(getApplicationContext(), "Cannot be saved", Toast.LENGTH_LONG).show();
-
         }
 
     }
 
-
-    @Bind(R.id.button_gif_savetogallery)
+    @Bind(R.id.button_gif_activity_savetogallery)
     Button buttonSaveToGallery;
 
-    @OnClick(R.id.button_gif_savetogallery)
+    @OnClick(R.id.button_gif_activity_savetogallery)
     public void saveToGallery() {
         Toast.makeText(getApplicationContext(), "This will Save Video Offline", Toast.LENGTH_LONG).show();
-
     }
 
-    @Bind(R.id.fab_gif_share)
+    @Bind(R.id.fab__gif_activity_share)
     FloatingActionButton fabGifShare;
 
-    @OnClick(R.id.fab_gif_share)
+    @OnClick(R.id.fab__gif_activity_share)
     public void shareGif() {
         String url = "https://giphy.com/gifs/" + gifId;
 
@@ -129,6 +128,15 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
     }
 
+    @Bind(R.id.gif_image_gif_activity)
+    ImageView gifImage;
+
+    @Bind(R.id.videoview_gif_activity)
+    VideoView videoView;
+
+    @Bind(R.id.progressbar_gif_activity)
+    ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,14 +144,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         setContentView(R.layout.activity_gif);
 
         ButterKnife.bind(this);
-
-
-        gifImage = (ImageView) findViewById(R.id.gif_image);
-        videoView = (VideoView) findViewById(R.id.videoView1);
-
         videoView.setVisibility(View.GONE);
-
-        progressBar = (ProgressBar) findViewById(R.id.gif_progress);
 
         //DeepLink Stuff
         if (getIntent().getBooleanExtra(DeepLink.IS_DEEP_LINK, false)) {
@@ -204,12 +205,13 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
             } else if (typeOfData.equals("trendingGif")) {
                 textViewGifTitle.setText("Trending Gif");
 
-            }else if (typeOfData.equals("favGifs")) {
+            } else if (typeOfData.equals("favGifs")) {
                 textViewGifTitle.setText("Favourite Gif");
 
             }
 
             linearLayout.setBackgroundColor(color);
+
             Picasso.with(getApplicationContext())
                     .load(gifStillUrl)
                     .placeholder(R.color.colorAccent)
@@ -273,20 +275,20 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
     @Override
     public void onFilterSelected(String mcategory) {
-        this.category = mcategory;
+        this.gifCategory = mcategory;
 
         //TODO Make sure When saving the value isn't already in the database
         if (extras.containsKey("getId")) {
 
-            FavouriteGif favouriteGif = new FavouriteGif(gifId, currentDate, category);
+            FavouriteGif favouriteGif = new FavouriteGif(gifId, currentDate, gifCategory);
             favouriteGif.save();
         } else if (giphyType1 != null) {
             searchData = "receivedGif";
-            FavouriteGif favouriteGif = new FavouriteGif(giphyType1, currentDate, category);
+            FavouriteGif favouriteGif = new FavouriteGif(giphyType1, currentDate, gifCategory);
             favouriteGif.save();
         } else if (giphyType2 != null) {
             searchData = "receivedGif";
-            FavouriteGif favouriteGif = new FavouriteGif(giphyType2, currentDate, category);
+            FavouriteGif favouriteGif = new FavouriteGif(giphyType2, currentDate, gifCategory);
             favouriteGif.save();
         }
         //TODO: Snackbar here
@@ -302,15 +304,15 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
 
     @Override
     public void localVideoUrl(String videoUrl) {
-        localurl = videoUrl;
-        Log.d(LOG_TAG, localurl);
+        videoLocalURL = videoUrl;
+        Log.d(LOG_TAG, videoLocalURL);
 
         gifImage.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
 
 
         //specify the location of media file
-        Uri uri = Uri.parse(localurl);
+        Uri uri = Uri.parse(videoLocalURL);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
