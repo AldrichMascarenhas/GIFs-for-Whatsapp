@@ -121,6 +121,24 @@ public class CategoryFilterFragment extends DialogFragment {
         return rootView;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // safety check
+        if (getDialog() == null) {
+            return;
+        }
+
+        int dialogWidth = ViewGroup.LayoutParams.MATCH_PARENT;
+        int dialogHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+        getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+
+        // ... other stuff you want to do in your onStart() method
+    }
+
     void updateListView() {
         List<Categories> categories = Categories.listAll(Categories.class);
         ArrayList<String> categoriesList = new ArrayList<>();

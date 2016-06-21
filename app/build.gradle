@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.nerdcutlet.gift"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -55,6 +55,5 @@ dependencies {
     compile 'com.airbnb:deeplinkdispatch:1.5.0'
     apt 'com.airbnb:deeplinkdispatch-processor:1.5.0'
     compile 'com.facebook.network.connectionclass:connectionclass:1.0.1'
-    compile 'com.github.florent37:picassopalette:1.0.2@aar'
 
 }
