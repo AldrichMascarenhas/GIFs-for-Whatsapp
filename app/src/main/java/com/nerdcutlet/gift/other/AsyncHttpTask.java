@@ -68,19 +68,19 @@ public class AsyncHttpTask extends AsyncTask<Void, Void, Void> {
         Call<GIFModelMain> gifsByIdCall;
         Log.d(LOG_TAG, "typeOfData : " + typeOfData);
         if (typeOfData.equals("gif")) {
-            gifCall = interf.searchGifs(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
+            gifCall = interf.searchGifs(searchParameter, rating, limit, "dc6zaTOxFJmzC");
             FetchData(gifCall);
 
         } else if (typeOfData.equals("sticker")) {
-            stickerCall = interf.searchStickers(searchParameter, rating, limit, BuildConfig.GIPHY_API_TOKEN);
+            stickerCall = interf.searchStickers(searchParameter, rating, limit, "dc6zaTOxFJmzC");
             FetchData(stickerCall);
 
         } else if (typeOfData.equals("trendingGif")) {
-            trendingCall = interf.getTrendingGifs(rating, limit, BuildConfig.GIPHY_API_TOKEN);
+            trendingCall = interf.getTrendingGifs(rating, limit, "dc6zaTOxFJmzC");
             FetchData(trendingCall);
 
         } else if (typeOfData.equals("favGifs")) {
-            gifsByIdCall = interf.getGifsByID(searchParameter, BuildConfig.GIPHY_API_TOKEN);
+            gifsByIdCall = interf.getGifsByID(searchParameter, "dc6zaTOxFJmzC");
             FetchData(gifsByIdCall);
         }
 

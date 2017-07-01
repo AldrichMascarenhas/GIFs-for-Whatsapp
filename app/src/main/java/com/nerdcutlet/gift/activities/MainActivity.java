@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     GiphyApiInterface interf = GiphyApi.createService(GiphyApiInterface.class);
-    Call<RandomGIFModel> randomGif = interf.getRandomGif("", "g", BuildConfig.GIPHY_API_TOKEN);
+    Call<RandomGIFModel> randomGif = interf.getRandomGif("", "g", "dc6zaTOxFJmzC");
 
 
     @Bind(R.id.search_edittext_field)

@@ -17,9 +17,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        buildTypes.each {
-            it.buildConfigField 'String', 'GIPHY_API_TOKEN', GiphyAPIKey
-        }
+
     }
 }
 
