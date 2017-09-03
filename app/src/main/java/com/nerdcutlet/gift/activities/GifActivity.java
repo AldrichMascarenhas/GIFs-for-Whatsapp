@@ -26,8 +26,6 @@ import android.widget.VideoView;
 
 import com.airbnb.deeplinkdispatch.DeepLink;
 import com.nerdcutlet.gift.R;
-import com.nerdcutlet.gift.fragments.CategoryFilterFragment;
-import com.nerdcutlet.gift.fragments.FilterFragment;
 import com.nerdcutlet.gift.models.FavouriteGif;
 import com.nerdcutlet.gift.other.VideoAsyncTask;
 import com.nerdcutlet.gift.utils.Utils;
@@ -42,7 +40,7 @@ import butterknife.OnClick;
 
 @DeepLink({"https://giphy.com/gifs/{giphyType1}", "https://giphy.com/gifs/{giphyType2}/html5",
         "https://gfycat.com/{gfycatType1}", "https://zippy.gfycat.com/{gfycatType2}", "https://giant.gfycat.com/{gfycatType3}"})
-public class GifActivity extends Activity implements VideoDownloadResponse, CategoryFilterFragment.OnFilterSelectedListener {
+public class GifActivity extends Activity implements VideoDownloadResponse{
 
     public final static String LOG_TAG = "GifActivity";
 
@@ -237,27 +235,7 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
         doStuff(builtURL);
     }
 
-    @Override
-    public void onFilterSelected(String mcategory) {
-        this.category = mcategory;
 
-        //TODO Make sure When saving the value isn't already in the database
-        if (extras.containsKey("getId")) {
-
-            FavouriteGif favouriteGif = new FavouriteGif(gifId, currentDate, category);
-            favouriteGif.save();
-        } else if (giphyType1 != null) {
-            searchData = "receivedGif";
-            FavouriteGif favouriteGif = new FavouriteGif(giphyType1, currentDate, category);
-            favouriteGif.save();
-        } else if (giphyType2 != null) {
-            searchData = "receivedGif";
-            FavouriteGif favouriteGif = new FavouriteGif(giphyType2, currentDate, category);
-            favouriteGif.save();
-        }
-        //TODO: Snackbar here
-
-    }
 
 
     void doStuff(String data) {

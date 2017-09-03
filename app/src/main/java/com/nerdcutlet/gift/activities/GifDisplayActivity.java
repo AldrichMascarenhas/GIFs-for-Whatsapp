@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nerdcutlet.gift.BuildConfig;
 import com.nerdcutlet.gift.R;
-import com.nerdcutlet.gift.fragments.FilterFragment;
 import com.nerdcutlet.gift.models.giphy.Datum;
 import com.nerdcutlet.gift.models.giphy.GIFModelMain;
 import com.nerdcutlet.gift.network.GiphyApi;
@@ -44,7 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Url;
 
-public class GifDisplayActivity extends AppCompatActivity implements FilterFragment.OnFilterSelectedListener, AsyncTaskResponse {
+public class GifDisplayActivity extends AppCompatActivity implements AsyncTaskResponse {
 
     public static final String LOG_TAG = "GifDisplayActivity";
     private RecyclerView mRecyclerView;
@@ -133,39 +132,11 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
     }
 
 
-    public void onFilterSelected(RadioButton filter, RadioButton limit) {
 
-        Toast.makeText(getApplicationContext(), "SELECTED " + filter.getText() + " " + limit.getText(), Toast.LENGTH_LONG).show();
-
-    }
     public void processFinish(List<Datum> p){
         datums = p;
         adapter.setmGIFDataList(p);
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_filter, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_filter) {
-            FragmentManager fm = getFragmentManager();
-            FilterFragment dialogFragment = new FilterFragment();
-            dialogFragment.show(fm, "Fragment");
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

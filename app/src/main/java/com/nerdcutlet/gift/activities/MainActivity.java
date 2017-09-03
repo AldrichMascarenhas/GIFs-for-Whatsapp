@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.search_edittext_field)
     EditText searchEditText;
 
-
-
     @Bind(R.id.trending_button)
     Button trending_button;
 
@@ -77,13 +75,7 @@ public class MainActivity extends AppCompatActivity {
         sendMessage("trendingGif", typeOfData);
     }
 
-    @OnClick(R.id.random_gif_button)
-    void newRandomGif() {
-        FetchData(randomGif);
-    }
 
-    @Bind(R.id.random_card_image)
-    ImageView randomCardImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-        FetchData(randomGif);
 
         tabLayout = (TabLayout) findViewById(R.id.tablayout_options_main_activity);
         tabLayout.addTab(tabLayout.newTab().setText("gif"));
@@ -169,38 +160,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void FetchData(Call<RandomGIFModel> call) {
-        //Since a Call instance can only be used once. Use clone to use it over again.
-
-        call.clone().enqueue(new Callback<RandomGIFModel>() {
-            @Override
-            public void onResponse(Call<RandomGIFModel> call, Response<RandomGIFModel> response) {
-                Log.d(LOG_TAG, "Status Code = " + response.code());
-
-                if (response.isSuccess()) {
-                    // request successful (status code 200, 201)
-                    RandomGIFModel result
-                            = response.body();
-                    Picasso.with(getApplicationContext()).load(result.getData().getFixedHeightDownsampledUrl()).into(randomCardImage);
-
-
-                    Log.d(LOG_TAG, "response = " + new Gson().toJson(result));
-
-
-                } else {
-                    //request not successful (like 400,401,403 etc)
-                    //Handle errors
-                    String X = response.body().toString();
-                    Log.e(LOG_TAG, "fail" + X);
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RandomGIFModel> call, Throwable t) {
-                Log.e(LOG_TAG, "fail");
-
-            }
-        });
-    }
 }

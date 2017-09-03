@@ -1,50 +1,16 @@
 <resources>
-    <string name="app_name">Gift</string>
+    <string name="app_name">GIFt</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_gif_display">Gifs</string>
 
-
     <string name="share_gif_text">Share Gif to...</string>
-
-
-    <string name="filter_apply">Apply</string>
-
-    <!--Filter Radio Group-->
-    <string name="radio_group_filter">Rating</string>
-    <string name="filter_g">G</string>
-    <string name="filter_pg">PG</string>
-    <string name="filter_pg_13">PG13</string>
-    <string name="filter_r">R</string>
-
-
-    <!--Limit Radio Group-->
-    <string name="radio_group_limit">Limit</string>
-    <string name="limit_1">10</string>
-    <string name="limit_2">30</string>
-    <string name="limit_3">50</string>
-    <string name="limit_4">75</string>
-
-    <!--Cards-->
-    <string name="random_gifs_text">Random Gif</string>
-
-    <string name="save_gif_offline">Save</string>
-    <string name="fav_gif">Favourite</string>
-
-    <string name="storage_filepath">GifStorage</string>
-    <string name="title_activity_fav">FavActivity</string>
 
     <string name="search_box_text">Laughing, Smiling</string>
     <string name="main_activity_top_text">Find the perfect Gif to express yourself</string>
     <string name="main_activity_trending_text">Trending Gifs</string>
-    <string name="main_activity_favourite_text">Favourited Gifs</string>
+
+    <string name="storage_filepath">GifStorage</string>
 
 
-    <string name="gif_favourite">Favourite</string>
-    <string name="gif_savetogallery">Save</string>
 
-    <!--Category-->
-    <string name="category_fragment_add_category">Add a new Category</string>
-    <string name="category_fragment_edittext_hint">Ex. Laughing</string>
-    <string name="category_fragment_add_category_buttton_text">Add Category</string>
-    <string name="category_fragment_pick_category">Pick a Category from Below</string>
 </resources>
