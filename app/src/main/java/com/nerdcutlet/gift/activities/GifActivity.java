@@ -79,40 +79,6 @@ public class GifActivity extends Activity implements VideoDownloadResponse, Cate
     @Bind(R.id.textview_gif_title)
     TextView textViewGifTitle;
 
-    @Bind(R.id.button_gif_favourite)
-    Button buttonGifFavourite;
-
-    @OnClick(R.id.button_gif_favourite)
-    public void addToFavourite() {
-
-        calendar = Calendar.getInstance();
-        currentDate = utils.getDateTime(calendar);
-
-        //String mGifID, int mTypeOfData, String mTag, String mDate
-        if (canBeSaved) {
-
-            FragmentManager fm = getFragmentManager();
-            CategoryFilterFragment dialogFragment = new CategoryFilterFragment();
-            dialogFragment.show(fm, "Fragment");
-
-            //Handle Setting in OnFilterSelected
-
-        } else {
-            Toast.makeText(getApplicationContext(), "Cannot be saved", Toast.LENGTH_LONG).show();
-
-        }
-
-    }
-
-
-    @Bind(R.id.button_gif_savetogallery)
-    Button buttonSaveToGallery;
-
-    @OnClick(R.id.button_gif_savetogallery)
-    public void saveToGallery() {
-        Toast.makeText(getApplicationContext(), "This will Save Video Offline", Toast.LENGTH_LONG).show();
-
-    }
 
     @Bind(R.id.fab_gif_share)
     FloatingActionButton fabGifShare;

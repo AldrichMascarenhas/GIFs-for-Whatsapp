@@ -85,7 +85,7 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
 
         adapter = new MyRecyclerAdapter(this, new OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position, Drawable drawable) {
+            public void onItemClick(View v, int position) {
                 Datum selectedDatum = datums.get(position);
 
 
@@ -110,10 +110,8 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
                 gifIntent.putExtra("typeOfData", typeOfData);
                 gifIntent.putExtra("searchData", searchData);
 
-                int color = Color.TRANSPARENT;
+                int color = R.color.colorPrimaryDark;
 
-                if (drawable instanceof ColorDrawable)
-                    color = ((ColorDrawable) drawable).getColor();
 
                 gifIntent.putExtra("backgroundColor", color);
 
@@ -124,14 +122,6 @@ public class GifDisplayActivity extends AppCompatActivity implements FilterFragm
         mRecyclerView.setAdapter(adapter);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

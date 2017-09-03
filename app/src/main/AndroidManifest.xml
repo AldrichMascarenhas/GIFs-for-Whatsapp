@@ -91,15 +91,6 @@
             android:name="QUERY_LOG"
             android:value="true" />
 
-        <activity
-            android:name=".activities.FavActivity"
-            android:label="@string/title_activity_fav"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nerdcutlet.gift.activities.MainActivity" />
-        </activity>
     </application>
 
 </manifest>

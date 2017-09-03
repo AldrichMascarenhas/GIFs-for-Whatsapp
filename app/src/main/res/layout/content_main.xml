@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"/>
 
     <LinearLayout
+        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -38,13 +39,7 @@
             android:inputType="text" />
 
 
-        <ImageView
-            android:id="@+id/search_voice_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:src="@drawable/ic_action_voice" />
+
 
 
     </LinearLayout>

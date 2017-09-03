@@ -79,7 +79,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(v, viewHolder.getAdapterPosition(), viewHolder.relativeLayout.getBackground());
+                listener.onItemClick(v, viewHolder.getAdapterPosition());
             }
         });
 
@@ -90,17 +90,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     public void onBindViewHolder(final CustomViewHolder holder, final int position) {
         final Datum data = mGIFDataList.get(position);
 
-        //Log.d(LOG_TAG, "Connection is : " + app.getmConnectionClass().toString());
-
-        /*
-        if(app.getmConnectionClass().toString().equals("POOR") ||app.getmConnectionClass().toString().equals("MODERATE") || app.getmConnectionClass().toString().equals("UNKNOWN")){
-
-            Ion.with(holder.gifImageView)
-                    .load();
-        }else{
-            Ion.with(holder.gifImageView)
-                    .load(data.getImages().getFixedHeightSmall().getUrl());
-        }*/
 
 
         //cancel any loading images on this view
@@ -127,10 +116,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
                         }
                         if (s != null) {
                             Log.d(LOG_TAG, "position : " + position +  " Pop : " + s.getPopulation() + " Swatch : " + s.getRgb() + "Title text color : " + s.getTitleTextColor());
-                            holder.relativeLayout.setBackgroundColor(s.getRgb());
 
-                            holder.mGifNameTextView.setTextColor(s.getTitleTextColor());
-                            holder.mGIFTypeTextView.setTextColor(s.getTitleTextColor());
                         }
                     }
                 }
@@ -138,8 +124,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
             }
         });
 
-        holder.mGIFTypeTextView.setText(data.getId());
-        holder.mGifNameTextView.setText(data.getRating());
     }
 
     @Override
@@ -156,19 +140,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 }
 
 class CustomViewHolder extends RecyclerView.ViewHolder {
-    protected TextView mGifNameTextView;
-    protected TextView mGIFTypeTextView;
     protected GifImageView gifImageView;
-    protected RelativeLayout relativeLayout;
 
     public CustomViewHolder(View view) {
         super(view);
 
 
         this.gifImageView = (GifImageView) view.findViewById(R.id.gifimageview_recyclerviewitem);
-        this.mGifNameTextView = (TextView) view.findViewById(R.id.textview1_recyclerviewitem);
-        this.mGIFTypeTextView = (TextView) view.findViewById(R.id.textview2_recyclerviewitem);
-        this.relativeLayout = (RelativeLayout) view.findViewById(R.id.relative_container_recyclerviewitem);
 
 
     }

@@ -68,40 +68,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linear_container_gif"
-            android:background="@color/gif2"
-            android:orientation="horizontal"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp">
 
-            <Button
-                android:id="@+id/button_gif_favourite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/testpadd"
-                android:text="@string/gif_favourite"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/button_gif_savetogallery"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/testpadd"
-                android:text="@string/gif_savetogallery"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
-
-        </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_gif_share"

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Gift</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_gif_display">GifDisplayActivity</string>
+    <string name="title_activity_gif_display">Gifs</string>
 
 
     <string name="share_gif_text">Share Gif to...</string>
