@@ -25,6 +25,6 @@ App Screenshots
 * Inline Gif [opened via link shared in Whatsapp]
 
 
-<img src="https://github.com/AldrichMascarenhas/GIFs-for-Whatsapp/blob/master/images/ogif1.png?raw=true" width="30%"></img> 
-<img src="https://github.com/AldrichMascarenhas/GIFs-for-Whatsapp/blob/master/images/ogif2.png?raw=true" width="30%"></img>
-<img src="https://github.com/AldrichMascarenhas/GIFs-for-Whatsapp/blob/master/images/ogif3.png?raw=true" width="30%"></img>
+<img src="https://github.com/AldrichMascarenhas/GIFs-for-Whatsapp/blob/master/images/gif1.png?raw=true" width="30%"></img> 
+<img src="https://github.com/AldrichMascarenhas/GIFs-for-Whatsapp/blob/master/images/gif2.png?raw=true" width="30%"></img>
+<img src="https://github.com/AldrichMascarenhas/GIFs-for-Whatsapp/blob/master/images/gif3.png?raw=true" width="30%"></img>
